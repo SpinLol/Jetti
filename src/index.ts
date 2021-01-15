@@ -27,7 +27,7 @@ client
 
 client.registry
   .registerGroups([
-    ['teams', 'Team commands'],
+    ['team', 'Team commands'],
     ['player', 'Player commands'],
   ])
   .registerDefaults()

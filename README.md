@@ -2,9 +2,39 @@
 
 Discord Bot which creates 2 balanced teams for a custom Valorant match.
 
-## How to start
+## Quick Overview
 
 tbd
+
+## Developer Environment
+
+Best Editor: [VS Code](https://code.visualstudio.com/)
+
+### Plugins for VS Code
+
+- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- [Bracket Pair Colorizer 2 (Recommendation)](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2)
+- [Material Icon Theme (Recommendation)](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme)
+- [One Dark Pro (Recommendation)](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme)
+
+### Autoformat On Save:
+
+1. Press `Ctrl + ,` (Settings UI) or `Ctrl + Shift + P` > `Open Settings (UI)`
+2. Search for `format on save`
+3. Tick the box with the title `Editor: Format On Save`
+
+![Format on Save](images/format-on-save.png)
+
+## How to start/develop
+
+```bash
+npm install
+```
+
+```bash
+npm start
+```
 
 ## Config File
 

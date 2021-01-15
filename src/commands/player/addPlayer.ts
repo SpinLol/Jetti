@@ -21,12 +21,12 @@ export default class AddPlayerCommand extends Command {
       args: [
         {
           key: 'user',
-          prompt: 'Which user do you wanna add? Ping him (@UserName)',
+          prompt: 'Which user do you wanna add? Ping him (@username)',
           type: 'user',
         },
         {
           key: 'level',
-          prompt: "What's his skill level?",
+          prompt: "What's his/her skill level?",
           type: 'float',
           validate: (level: number) => level >= 1 && level <= 5,
         },
@@ -40,7 +40,7 @@ export default class AddPlayerCommand extends Command {
     });
 
     if (foundPlayer != undefined) {
-      msg.say('Player was already added!');
+      msg.say(`Player ${user.tag} was already added!`);
       return new Message(null, null, msg.channel);
     }
 
@@ -50,7 +50,7 @@ export default class AddPlayerCommand extends Command {
     });
     await player.save();
 
-    msg.say(`Player ${user.username} has the skill level ${level} and was added successfully!`);
+    msg.say(`Player ${user.tag} has the skill level ${level} and was added successfully!`);
     return new Message(null, null, msg.channel);
   }
 }

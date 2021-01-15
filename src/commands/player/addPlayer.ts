@@ -1,6 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { Message } from 'discord.js';
+import { Message, User } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+
+import Player from '../../db/models/Player.model';
+
+interface PromptArgs {
+  user: User;
+  level: number;
+}
 
 export default class AddPlayerCommand extends Command {
   constructor(client: CommandoClient) {
@@ -14,33 +21,36 @@ export default class AddPlayerCommand extends Command {
       args: [
         {
           key: 'user',
-          prompt: 'Which User?',
+          prompt: 'Which user do you wanna add? Ping him (@UserName)',
           type: 'user',
         },
         {
           key: 'level',
-          prompt: 'Skill Level?',
-          type: 'integer',
+          prompt: "What's his skill level?",
+          type: 'float',
+          validate: (level: number) => level >= 1 && level <= 5,
         },
       ],
     });
   }
 
-  async run(msg: CommandoMessage, args: object | string | string[]) {
-    // if (args.toString().length == 0) {
-    //   msg.say('No arguments found...');
-    //   return new Message(null, null, msg.channel);
-    // }
+  async run(msg: CommandoMessage, { user, level }: PromptArgs) {
+    const foundPlayer = await Player.findOne({
+      where: { userId: user.id },
+    });
 
-    // if (msg.mentions.users.size == 0) {
-    //   msg.say('No User tagged...');
-    //   return new Message(null, null, msg.channel);
-    // }
+    if (foundPlayer != undefined) {
+      msg.say('Player was already added!');
+      return new Message(null, null, msg.channel);
+    }
 
-    //console.log(msg.mentions.users.first());
+    const player = new Player({
+      userId: user.id,
+      skillLevel: level,
+    });
+    await player.save();
 
-    // const argss = args.toString().slice(this.client.commandPrefix.length).trim().split(/ +/);
-
+    msg.say(`Player ${user.username} has the skill level ${level} and was added successfully!`);
     return new Message(null, null, msg.channel);
   }
 }

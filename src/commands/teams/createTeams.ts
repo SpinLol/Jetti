@@ -1,9 +1,7 @@
-const Command = require('discord.js-commando').Command;
+import { Command, CommandoClient, CommandMessage } from 'discord.js-commando';
 
-module.exports = class CreateTeamsCommand extends (
-  Command
-) {
-  constructor(client) {
+export default class CreateTeamsCommand extends Command {
+  constructor(client: CommandoClient) {
     super(client, {
       name: 'create',
       group: 'teams',
@@ -14,7 +12,7 @@ module.exports = class CreateTeamsCommand extends (
     });
   }
 
-  async run(msg, args) {
+  async run(msg: CommandMessage) {
     return msg.say(`created teams`);
   }
-};
+}

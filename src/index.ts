@@ -1,8 +1,8 @@
-const Commando = require('discord.js-commando');
-const path = require('path');
-const config = require('./config.json');
+import { CommandoClient } from 'discord.js-commando';
+import path from 'path';
+import config from './config.json';
 
-const client = new Commando.Client({
+const client = new CommandoClient({
   owner: config.owner,
 });
 
@@ -23,6 +23,9 @@ client
 client.registry
   .registerGroups([['teams', 'Team commands']])
   .registerDefaults()
-  .registerCommandsIn(path.join(__dirname, 'commands'));
+  .registerCommandsIn({
+    filter: /^([^.].*)\.(js|ts)$/,
+    dirname: path.join(__dirname, 'commands'),
+  });
 
 client.login(config.token);

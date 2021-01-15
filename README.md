@@ -28,9 +28,13 @@ Best Editor: [VS Code](https://code.visualstudio.com/)
 
 ## How to start/develop
 
+Do this once to install dependencies.
+
 ```bash
 npm install
 ```
+
+Changes in the `src` directory will automatically restart the bot.
 
 ```bash
 npm start
@@ -63,5 +67,13 @@ while no fair teams:
    2. else go to step 1
 
 ## Commands
+
+## Resources
+
+- https://discordpy.readthedocs.io/en/latest/discord.html
+- https://discordjs.guide/commando/
+- https://discordjs.guide/
+- https://github.com/discordjs/discord.js
+- https://discord.js.org/#/
 
 ## Contributors

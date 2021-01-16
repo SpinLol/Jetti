@@ -17,7 +17,8 @@ export default class buildTeamsCommand extends Command {
   async run(msg: CommandoMessage, rawArgs: string) {
     const end = new Message(null, null, msg.channel);
 
-    const neededUsers = 4;
+    const neededUsers = 5;
+    const tries = 10;
     let userIds: string[];
     const channel = msg.member.voice.channel;
 
@@ -36,7 +37,7 @@ export default class buildTeamsCommand extends Command {
       }
 
       userIds = channel.members.map((_, k) => k);
-      await this.buildTeams(msg, userIds, neededUsers, 10);
+      await this.buildTeams(msg, userIds, neededUsers, tries);
       return end;
     }
 
@@ -47,6 +48,12 @@ export default class buildTeamsCommand extends Command {
 
     if (msg.mentions.users.size == 0) {
       msg.say('You forgot to choose the remaining players.');
+      return end;
+    }
+
+    if (msg.mentions.users.size == neededUsers) {
+      userIds = msg.mentions.users.map((_, k) => k);
+      await this.buildTeams(msg, userIds, neededUsers, tries);
       return end;
     }
 
@@ -65,7 +72,7 @@ export default class buildTeamsCommand extends Command {
       return end;
     }
 
-    await this.buildTeams(msg, userIds, neededUsers, 10);
+    await this.buildTeams(msg, userIds, neededUsers, tries);
     return end;
   }
 
@@ -84,8 +91,6 @@ export default class buildTeamsCommand extends Command {
 
       const team1 = p.splice(0, half);
       const team2 = p.splice(-half);
-
-      console.log(team1, team2);
 
       const skill1 = team1.reduce((a, b) => {
         return a + b.skillLevel;

@@ -33,13 +33,13 @@ export default class RemovePlayerCommand extends Command {
     });
 
     if (player == undefined) {
-      msg.say(`Player ${user.tag} is not in the database...`);
+      msg.say(`Player \`${user.tag}\` is not in the database...`);
       return new Message(null, null, msg.channel);
     }
 
     await player.destroy();
 
-    msg.say(`Player ${user.tag} was successfully removed from the database!`);
+    msg.say(`Player \`${user.tag}\` was successfully removed from the database!`);
     return new Message(null, null, msg.channel);
   }
 }

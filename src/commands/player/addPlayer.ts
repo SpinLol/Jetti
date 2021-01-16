@@ -40,7 +40,7 @@ export default class AddPlayerCommand extends Command {
     });
 
     if (foundPlayer != undefined) {
-      msg.say(`Player ${user.tag} was already added!`);
+      msg.say(`Player \`${user.tag}\` was already added!`);
       return new Message(null, null, msg.channel);
     }
 
@@ -50,7 +50,7 @@ export default class AddPlayerCommand extends Command {
     });
     await player.save();
 
-    msg.say(`Player ${user.tag} has the skill level ${level} and was added successfully!`);
+    msg.say(`Player \`${user.tag}\` has the skill level ${level} and was added successfully!`);
     return new Message(null, null, msg.channel);
   }
 }

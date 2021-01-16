@@ -17,7 +17,7 @@ export default class buildTeamsCommand extends Command {
   async run(msg: CommandoMessage, rawArgs: string) {
     const end = new Message(null, null, msg.channel);
 
-    const neededUsers = 5;
+    const neededUsers = 10;
     const tries = 10;
     let userIds: string[];
     const channel = msg.member.voice.channel;

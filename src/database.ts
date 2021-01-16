@@ -5,10 +5,9 @@ const sequelize =
     ? new Sequelize({
         dialect: 'sqlite',
         storage: 'src/db/db.sqlite',
-        models: [__dirname + '/**/*.model.ts'],
       })
-    : new Sequelize(process.env.DATABASE_URL, {
-        models: [__dirname + '/**/*.model.ts'],
-      });
+    : new Sequelize(process.env.DATABASE_URL);
+
+sequelize.addModels([__dirname + '/**/*.model.ts']);
 
 export { sequelize };

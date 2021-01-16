@@ -1,1 +1,1 @@
-worker: npm run dev
+worker: nodemon --config nodemon.json src/index.ts

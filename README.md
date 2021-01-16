@@ -75,5 +75,6 @@ while no fair teams:
 - https://discordjs.guide/
 - https://github.com/discordjs/discord.js
 - https://discord.js.org/#/
+- https://github.com/RobinBuschmann/sequelize-typescript#usage
 
 ## Contributors

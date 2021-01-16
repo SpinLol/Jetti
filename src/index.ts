@@ -1,10 +1,12 @@
 import { CommandoClient } from 'discord.js-commando';
 import path from 'path';
-import config from './config/config.json';
 import { sequelize } from './database';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config();
+
 const client = new CommandoClient({
-  owner: config.owner,
+  owner: process.env.BOT_OWNER,
 });
 
 client
@@ -15,9 +17,10 @@ client
     console.log(`Client ready: logged in as ${client.user.username}#${client.user.discriminator} (${client.user.id})`);
     try {
       await sequelize.authenticate();
+      await sequelize.sync();
       console.log('Connection to database was successfully.');
     } catch (error) {
-      console.error('Unable to connect to database.');
+      console.error('Unable to connect to database.', error);
     }
   })
   .on('disconnect', () => {
@@ -26,7 +29,7 @@ client
 
 client.registry
   .registerGroups([
-    ['teams', 'Team commands'],
+    ['team', 'Team commands'],
     ['player', 'Player commands'],
   ])
   .registerDefaults()
@@ -35,4 +38,4 @@ client.registry
     dirname: path.join(__dirname, 'commands'),
   });
 
-client.login(config.token);
+client.login(process.env.BOT_TOKEN);

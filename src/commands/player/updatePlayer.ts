@@ -13,7 +13,7 @@ export default class UpdatePlayerCommand extends Command {
   constructor(client: CommandoClient) {
     super(client, {
       name: 'update-player',
-      aliases: ['update'],
+      aliases: ['update', 'u'],
       group: 'player',
       memberName: 'update',
       description: 'Updates the level of a Player',

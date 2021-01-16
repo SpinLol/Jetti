@@ -13,7 +13,7 @@ export default class AddPlayerCommand extends Command {
   constructor(client: CommandoClient) {
     super(client, {
       name: 'add-player',
-      aliases: ['add'],
+      aliases: ['add', 'a'],
       group: 'player',
       memberName: 'add',
       description: 'Adds a new Player to the db',

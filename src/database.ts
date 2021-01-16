@@ -7,6 +7,8 @@ const sequelize =
         storage: 'src/db/db.sqlite',
         models: [__dirname + '/**/*.model.ts'],
       })
-    : new Sequelize(process.env.DATABASE_URL);
+    : new Sequelize(process.env.DATABASE_URL, {
+        models: [__dirname + '/**/*.model.ts'],
+      });
 
 export { sequelize };

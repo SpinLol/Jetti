@@ -39,7 +39,7 @@ export default class AddPlayerCommand extends Command {
       where: { userId: user.id },
     });
 
-    if (foundPlayer != undefined) {
+    if (foundPlayer != null) {
       msg.say(`Player \`${user.tag}\` was already added!`);
       return new Message(null, null, msg.channel);
     }

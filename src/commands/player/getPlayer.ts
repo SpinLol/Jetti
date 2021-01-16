@@ -8,19 +8,19 @@ interface PromptArgs {
   user: User;
 }
 
-export default class RemovePlayerCommand extends Command {
+export default class GetPlayerCommand extends Command {
   constructor(client: CommandoClient) {
     super(client, {
-      name: 'remove-player',
-      aliases: ['remove', 'del', 'delete', 'r'],
+      name: 'get-player',
+      aliases: ['get'],
       group: 'player',
-      memberName: 'remove',
-      description: 'Removes a given Player from the database',
+      memberName: 'get',
+      description: 'Get Information about a Player',
       argsCount: 1,
       args: [
         {
           key: 'user',
-          prompt: 'Which user do you wanna add? Ping him (@UserName)',
+          prompt: 'Who do you want to know about? Ping him (@username)',
           type: 'user',
         },
       ],
@@ -28,18 +28,16 @@ export default class RemovePlayerCommand extends Command {
   }
 
   async run(msg: CommandoMessage, { user }: PromptArgs) {
-    const player = await Player.findOne({
+    const foundPlayer = await Player.findOne({
       where: { userId: user.id },
     });
 
-    if (player == null) {
-      msg.say(`Player \`${user.tag}\` is not in the database...`);
+    if (foundPlayer == null) {
+      msg.say(`Player \`${user.tag}\` is not in database!`);
       return new Message(null, null, msg.channel);
     }
 
-    await player.destroy();
-
-    msg.say(`Player \`${user.tag}\` was successfully removed from the database!`);
+    msg.say(`Player \`${user.tag}\` has the skill level ${foundPlayer.skillLevel}`);
     return new Message(null, null, msg.channel);
   }
 }

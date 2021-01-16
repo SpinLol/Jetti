@@ -23,6 +23,12 @@ client
     } catch (error) {
       console.error('Unable to connect to database.', error);
     }
+
+    await client.user.setPresence({
+      activity: { name: 'with your heart ❤', type: 'PLAYING' },
+      status: 'dnd',
+    });
+    console.log('Client Presence was set successfully!');
   })
   .on('disconnect', () => {
     console.warn('Disconnected');

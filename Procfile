@@ -1,1 +1,1 @@
-worker: nodemon --config nodemon.json src/index.ts
+worker: node dist/index.js

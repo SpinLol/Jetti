@@ -12,7 +12,7 @@ export default class GetPlayerCommand extends Command {
   constructor(client: CommandoClient) {
     super(client, {
       name: 'get-player',
-      aliases: ['get'],
+      aliases: ['get', 'g'],
       group: 'player',
       memberName: 'get',
       description: 'Get Information about a Player',

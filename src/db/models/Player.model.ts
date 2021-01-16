@@ -8,4 +8,7 @@ export default class Player extends Model {
 
   @Column
   skillLevel: number;
+
+  @Column
+  userTag: string;
 }

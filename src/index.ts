@@ -17,7 +17,8 @@ client
     console.log(`Client ready: logged in as ${client.user.username}#${client.user.discriminator} (${client.user.id})`);
     try {
       await sequelize.authenticate();
-      await sequelize.sync();
+      const options = process.env.NODE_ENV === 'development' ? { alter: true } : {};
+      await sequelize.sync(options);
       console.log('Connection to database was successfully.');
     } catch (error) {
       console.error('Unable to connect to database.', error);

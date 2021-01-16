@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import { Message, User } from 'discord.js';
+import { Message } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 
 import Player from '../../db/models/Player.model';
@@ -17,28 +17,25 @@ export default class ListPlayersCommand extends Command {
   }
 
   async run(msg: CommandoMessage) {
-    let players = await Player.findAll();
+    const players = await Player.findAll({
+      order: [['userTag', 'ASC']],
+    });
 
-    // players.sort((a, b) => {
-    //   if (msg.guild.members.cache.get(a.userId) < msg.guild.members.cache.get(b.userId)) {
-    //     return -1;
-    //   }
-    //   if (msg.guild.members.cache.get(a.userId) > msg.guild.members.cache.get(b.userId)) {
-    //     return 1;
-    //   }
-    //   return 0;
-    // });
-    // players.sort((a, b) =>
-    //   msg.guild.members.cache
-    //     .get(a.userId)
-    //     .user.username.localeCompare(msg.guild.members.cache.get(b.userId).user.username),
-    // );
-    let playersAsStrings = '';
-    for (const player of players) {
-      playersAsStrings += `${msg.guild.members.cache.get(player.userId)} - ${player.skillLevel}\n`;
-    }
+    const playerList = players.reduce(this.printPlayers, '');
 
-    msg.say(playersAsStrings);
+    msg.say(this.printAllPlayers(playerList));
     return new Message(null, null, msg.channel);
+  }
+
+  printPlayers(prev: string, { userTag, skillLevel }: Player, i: number): string {
+    return `${prev}\n\t${('0' + (i + 1)).slice(-2)}) Level ${skillLevel} \t ${userTag}`;
+  }
+
+  printAllPlayers(players: string): string {
+    let res = '```\nAll Awesome Players';
+    res += players;
+    res += '\n```';
+
+    return res;
   }
 }

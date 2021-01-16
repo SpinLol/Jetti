@@ -92,28 +92,37 @@ export default class buildTeamsCommand extends Command {
       const team1 = p.splice(0, half);
       const team2 = p.splice(-half);
 
-      const skill1 = team1.reduce((a, b) => {
-        return a + b.skillLevel;
-      }, 0);
-      const skill2 = team2.reduce((a, b) => {
-        return a + b.skillLevel;
-      }, 0);
+      const skill1 = team1.reduce(this.totalSkillLevel, 0);
+      const skill2 = team2.reduce(this.totalSkillLevel, 0);
 
       if (skill1 == skill2 || skill1 + 1 == skill2 || skill1 - 1 == skill2) {
-        const teamNames1 = team1.reduce((a, b) => {
-          const playerName = msg.guild.members.cache.get(b.userId);
-          return `${a} ${playerName}`;
-        }, '');
-        const teamNames2 = team2.reduce((a, b) => {
-          const playerName = msg.guild.members.cache.get(b.userId);
-          return `${a} ${playerName}`;
-        }, '');
+        const teamNames1 = team1.reduce(this.printTeamMembers, '');
+        const teamNames2 = team2.reduce(this.printTeamMembers, '');
 
-        msg.say(`Team 1: ${teamNames1}\n\nTeam 2: ${teamNames2}`);
+        msg.say(this.printTeams(teamNames1, teamNames2));
         return;
       }
     }
 
     msg.say(`Could not create fair teams after trying ${tries} times. Try again.`);
+  }
+
+  printTeams(team1: string, team2: string): string {
+    let res = '```\n';
+    res += 'Team 1';
+    res += team1;
+    res += '\nTeam2';
+    res += team2;
+    res += '\n```';
+
+    return res;
+  }
+
+  printTeamMembers(prev: string, { userTag, skillLevel }: Player): string {
+    return `${prev}\n\tLevel ${skillLevel} \t ${userTag}`;
+  }
+
+  totalSkillLevel(total: number, player: Player): number {
+    return total + player.skillLevel;
   }
 }

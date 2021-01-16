@@ -47,10 +47,11 @@ export default class AddPlayerCommand extends Command {
     const player = new Player({
       userId: user.id,
       skillLevel: level,
+      userTag: msg.guild.members.cache.get(user.id).user.tag,
     });
     await player.save();
 
-    msg.say(`Player \`${user.tag}\` has the skill level ${level} and was added successfully!`);
+    msg.say(`Player \`${player.userTag}\` has the skill level ${player.skillLevel} and was added successfully!`);
     return new Message(null, null, msg.channel);
   }
 }

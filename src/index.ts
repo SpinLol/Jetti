@@ -1,10 +1,12 @@
 import { CommandoClient } from 'discord.js-commando';
 import path from 'path';
-import config from './config/config.json';
 import { sequelize } from './database';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config();
+
 const client = new CommandoClient({
-  owner: process.env.BOT_OWNER || config.owner,
+  owner: process.env.BOT_OWNER,
 });
 
 client
@@ -36,4 +38,4 @@ client.registry
     dirname: path.join(__dirname, 'commands'),
   });
 
-client.login(process.env.BOT_TOKEN || config.token);
+client.login(process.env.BOT_TOKEN);

@@ -4,7 +4,7 @@ import config from './config/config.json';
 import { sequelize } from './database';
 
 const client = new CommandoClient({
-  owner: config.owner,
+  owner: process.env.BOT_OWNER || config.owner,
 });
 
 client
@@ -36,4 +36,4 @@ client.registry
     dirname: path.join(__dirname, 'commands'),
   });
 
-client.login(config.token);
+client.login(process.env.BOT_TOKEN || config.token);

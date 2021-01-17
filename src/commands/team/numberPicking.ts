@@ -35,7 +35,7 @@ export default class numberPickingCommand extends Command {
   async run(msg: CommandoMessage, rawArgs: string) {
     console.log(rawArgs);
     const end = new Message(null, null, msg.channel);
-    const neededUsers = 2;
+    const neededUsers = 10;
     let userIds: string[];
     const channel = msg.member.voice.channel;
 

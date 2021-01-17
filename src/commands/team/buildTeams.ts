@@ -5,6 +5,7 @@ import Player from '../../db/models/Player.model';
 import { shuffle } from '../../util/arrayHelper';
 
 export default class buildTeamsCommand extends Command {
+  randomAliases = ['r', 'rand', 'random'];
   constructor(client: CommandoClient) {
     super(client, {
       name: 'build',
@@ -16,11 +17,14 @@ export default class buildTeamsCommand extends Command {
 
   async run(msg: CommandoMessage, rawArgs: string) {
     const end = new Message(null, null, msg.channel);
-
     const neededUsers = 10;
     const tries = 10;
     let userIds: string[];
     const channel = msg.member.voice.channel;
+
+    rawArgs += ' '; //necessary for flag check below
+    //checks if random flag is set. Somewhat broken, for example: !build -r@Playertag, but I guess user should be reponsible
+    const doRandom = this.randomAliases.some((rStr) => rawArgs.includes('-' + rStr + ' '));
 
     if (rawArgs.trim() === '') {
       if (channel == null) {
@@ -37,7 +41,7 @@ export default class buildTeamsCommand extends Command {
       }
 
       userIds = channel.members.map((_, k) => k);
-      await this.buildTeams(msg, userIds, neededUsers, tries);
+      await this.buildTeams(msg, userIds, neededUsers, tries, doRandom);
       return end;
     }
 
@@ -53,7 +57,7 @@ export default class buildTeamsCommand extends Command {
 
     if (msg.mentions.users.size == neededUsers) {
       userIds = msg.mentions.users.map((_, k) => k);
-      await this.buildTeams(msg, userIds, neededUsers, tries);
+      await this.buildTeams(msg, userIds, neededUsers, tries, doRandom);
       return end;
     }
 
@@ -72,13 +76,20 @@ export default class buildTeamsCommand extends Command {
       return end;
     }
 
-    await this.buildTeams(msg, userIds, neededUsers, tries);
+    await this.buildTeams(msg, userIds, neededUsers, tries, doRandom);
     return end;
   }
 
-  async buildTeams(msg: CommandoMessage, userIds: string[], playerCount: number, tries: number): Promise<void> {
+  async buildTeams(
+    msg: CommandoMessage,
+    userIds: string[],
+    playerCount: number,
+    tries: number,
+    doRandom: boolean,
+  ): Promise<void> {
     const half = Math.ceil(playerCount / 2);
     const players = await Player.findAll({ where: { userId: userIds } });
+    const maxSkillGap = 1;
 
     if (players.length < playerCount) {
       msg.say(`${playerCount - players.length} players are not in the database. Add them first and try again.`);
@@ -95,7 +106,7 @@ export default class buildTeamsCommand extends Command {
       const skill1 = team1.reduce(this.totalSkillLevel, 0);
       const skill2 = team2.reduce(this.totalSkillLevel, 0);
 
-      if (Math.abs(skill1 - skill2) < 2) {
+      if (doRandom || Math.abs(skill1 - skill2) <= maxSkillGap) {
         const teamNames1 = team1.reduce(this.printTeamMembers, '');
         const teamNames2 = team2.reduce(this.printTeamMembers, '');
 

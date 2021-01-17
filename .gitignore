@@ -7,3 +7,5 @@ src/config/config.json
 dist/
 
 .env
+
+src/db/db.sqlite

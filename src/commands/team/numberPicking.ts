@@ -1,22 +1,3 @@
-/*
-questions
-can users be args?
-should first two users mentioned be team pickers?
-pm the users their number?
-
-ideas
-say *team leader 1* picked *user* to be on their team
-edit initial message to update teams as they are picked, create two columns with embeds
-always delete number messages shortly after to not clutter chat
-
-catches
-same leader tries to pick twice
-leader picks number already picked
-leader picks illegal number
-
-*/
-
-/* eslint-disable @typescript-eslint/ban-types */
 import { Message } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { shuffle } from '../../util/arrayHelper';

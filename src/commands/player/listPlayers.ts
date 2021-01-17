@@ -4,6 +4,9 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import Player from '../../db/models/Player.model';
 
 export default class ListPlayersCommand extends Command {
+  skillAliases = ['s', 'skill', 'skill level'];
+  alphaAliases = ['a', 'alpha', 'alphabetically'];
+
   constructor(client: CommandoClient) {
     super(client, {
       name: 'list-players',
@@ -11,15 +14,25 @@ export default class ListPlayersCommand extends Command {
       group: 'player',
       memberName: 'list',
       description: 'Lists all players in the database',
-      argsCount: 0,
+      examples: ['list a', 'l a', 'l s', 'l'],
     });
   }
 
-  async run(msg: CommandoMessage) {
-    const players = await Player.findAll({
-      order: [['userTag', 'ASC']],
-    });
+  async run(msg: CommandoMessage, rawArgs: string) {
+    const args = rawArgs.trim().split(/ +/);
+    let options = {};
 
+    if (this.skillAliases.some((v) => args.includes(v))) {
+      options = {
+        order: [['skillLevel', 'DESC']],
+      };
+    } else if (this.alphaAliases.some((v) => args.includes(v))) {
+      options = {
+        order: [['userTag', 'ASC']],
+      };
+    }
+
+    const players = await Player.findAll(options);
     const playerList = players.reduce(this.printPlayers, '');
 
     msg.say(this.printAllPlayers(playerList));
@@ -27,7 +40,7 @@ export default class ListPlayersCommand extends Command {
   }
 
   printPlayers(prev: string, { userTag, skillLevel }: Player, i: number): string {
-    return `${prev}\n\t${('0' + (i + 1)).slice(-2)}) Level ${skillLevel} \t ${userTag}`;
+    return `${prev}\n\t${('' + (i + 1)).padStart(2, '0')}) Level ${skillLevel} \t ${userTag}`;
   }
 
   printAllPlayers(players: string): string {

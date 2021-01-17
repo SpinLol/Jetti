@@ -27,7 +27,7 @@ export default class AddPlayerCommand extends Command {
           key: 'level',
           prompt: "What's his/her skill level?",
           type: 'float',
-          validate: (level: number) => level >= 1 && level <= 5,
+          validate: (level: number) => level >= 1 && level <= 6,
         },
       ],
     });

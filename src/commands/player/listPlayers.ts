@@ -19,18 +19,20 @@ export default class ListPlayersCommand extends Command {
   }
 
   async run(msg: CommandoMessage, rawArgs: string) {
-    let players;
-    if (this.skillAliases.includes(rawArgs)) {
-      players = await Player.findAll({
-        order: [['skillLevel', 'ASC']],
-      });
-    } else if (this.alphaAliases.includes(rawArgs)) {
-      players = await Player.findAll({
+    const args = rawArgs.trim().split(/ +/);
+    let options = {};
+
+    if (this.skillAliases.some((v) => args.includes(v))) {
+      options = {
+        order: [['skillLevel', 'DESC']],
+      };
+    } else if (this.alphaAliases.some((v) => args.includes(v))) {
+      options = {
         order: [['userTag', 'ASC']],
-      });
-    } else {
-      players = await Player.findAll({});
+      };
     }
+
+    const players = await Player.findAll(options);
     const playerList = players.reduce(this.printPlayers, '');
 
     msg.say(this.printAllPlayers(playerList));

@@ -95,7 +95,7 @@ export default class buildTeamsCommand extends Command {
       const skill1 = team1.reduce(this.totalSkillLevel, 0);
       const skill2 = team2.reduce(this.totalSkillLevel, 0);
 
-      if (skill1 == skill2 || skill1 + 1 == skill2 || skill1 - 1 == skill2) {
+      if (Math.abs(skill1 - skill2) < 2) {
         const teamNames1 = team1.reduce(this.printTeamMembers, '');
         const teamNames2 = team2.reduce(this.printTeamMembers, '');
 

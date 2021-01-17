@@ -1,4 +1,4 @@
-import { Column, Model, Table, Unique } from 'sequelize-typescript';
+import { Column, DataType, Model, Table, Unique } from 'sequelize-typescript';
 
 @Table
 export default class Player extends Model {
@@ -6,7 +6,7 @@ export default class Player extends Model {
   @Column
   userId: string;
 
-  @Column
+  @Column(DataType.FLOAT)
   skillLevel: number;
 
   @Column

@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const client = new CommandoClient({
   owner: process.env.BOT_OWNER,
+  commandPrefix: process.env.NODE_ENV === 'development' ? '#' : '!',
 });
 
 client

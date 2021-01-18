@@ -1,7 +1,7 @@
 import { Message } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 
-import Player from '../../db/models/Player.model';
+import { Player } from '../../db/models';
 
 export default class ListPlayersCommand extends Command {
   skillAliases = ['s', 'skill', 'skill level'];

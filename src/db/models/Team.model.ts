@@ -1,7 +1,6 @@
-import { Column, Model, Table, ForeignKey, HasMany, BelongsToMany } from 'sequelize-typescript';
+import { Column, Model, Table, ForeignKey, HasMany, BelongsTo } from 'sequelize-typescript';
 import PlayerH from '../../db/models/PlayerH.model';
 import Match from '../../db/models/Match.model';
-import TeamMatch from '../../db/models/TeamMatchModel';
 
 @Table
 export default class Team extends Model {
@@ -10,27 +9,42 @@ export default class Team extends Model {
 
   @ForeignKey(() => PlayerH)
   @Column
-  p1: number;
+  playerId1: number;
+
+  @BelongsTo(() => PlayerH, 'playerId1')
+  player1: PlayerH;
 
   @ForeignKey(() => PlayerH)
   @Column
-  p2: number;
+  playerId2: number;
+
+  @BelongsTo(() => PlayerH, 'playerId2')
+  player2: PlayerH;
 
   @ForeignKey(() => PlayerH)
   @Column
-  p3: number;
+  playerId3: number;
+
+  @BelongsTo(() => PlayerH, 'playerId3')
+  player3: PlayerH;
 
   @ForeignKey(() => PlayerH)
   @Column
-  p4: number;
+  playerId4: number;
+
+  @BelongsTo(() => PlayerH, 'playerId4')
+  player4: PlayerH;
 
   @ForeignKey(() => PlayerH)
   @Column
-  p5: number;
+  playerId5: number;
 
-  @BelongsToMany(() => Match, () => TeamMatch)
-  matches: Match[];
+  @BelongsTo(() => PlayerH, 'playerId5')
+  player5: PlayerH;
 
-  @HasMany(() => PlayerH)
-  players: PlayerH[];
+  @HasMany(() => Match, 'teamId1')
+  match1: Match[];
+
+  @HasMany(() => Match, 'teamId2')
+  match2: Match[];
 }

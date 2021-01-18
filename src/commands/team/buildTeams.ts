@@ -1,6 +1,6 @@
 import { Message } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import Player from '../../db/models/Player.model';
+import { Player } from '../../db/models';
 import { shuffle } from '../../util/arrayHelper';
 
 export default class buildTeamsCommand extends Command {

@@ -1,16 +1,14 @@
-import { Column, DataType, Model, Table, ForeignKey, PrimaryKey, BelongsTo, BelongsToMany } from 'sequelize-typescript';
-import PlayerHTeam from '../../db/models/PlayerHTeam';
-import Player from '../../db/models/Player.model';
-import Team from '../../db/models/Team.model';
+import { Column, DataType, Model, Table, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
+import Player from './Player.model';
+import Team from './Team.model';
 
 @Table
 export default class PlayerH extends Model {
-  //   @PrimaryKey
   @ForeignKey(() => Player)
   @Column
   playerId: number;
 
-  @BelongsTo(() => Player, 'playerId')
+  @BelongsTo(() => Player)
   player: Player;
 
   @Column(DataType.FLOAT)
@@ -19,6 +17,18 @@ export default class PlayerH extends Model {
   @Column
   historyDate: string;
 
-  @BelongsToMany(() => Team, () => PlayerHTeam) //brauch ich wirklich eine PlayerHTeam Tabelle, oder jedes match ein neuen PlayerH erstellen?
-  teams: Team[];
+  @HasMany(() => Team, 'playerId1')
+  team1: Team[];
+
+  @HasMany(() => Team, 'playerId2')
+  team2: Team[];
+
+  @HasMany(() => Team, 'playerId3')
+  team3: Team[];
+
+  @HasMany(() => Team, 'playerId4')
+  team4: Team[];
+
+  @HasMany(() => Team, 'playerId5')
+  team5: Team[];
 }

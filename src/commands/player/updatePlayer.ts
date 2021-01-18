@@ -1,7 +1,7 @@
 import { Message, User } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 
-import Player from '../../db/models/Player.model';
+import { Player } from '../../db/models';
 
 interface PromptArgs {
   user: User;

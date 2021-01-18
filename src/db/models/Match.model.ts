@@ -1,14 +1,10 @@
-import { Column, HasOne, Model, Table, Unique, ForeignKey } from 'sequelize-typescript';
+import { Column, Model, Table, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import Team from '../../db/models/Team.model';
 
 @Table
 export default class Match extends Model {
-  @Unique
   @Column
-  matchDate: string;
-
-  @Column
-  matchTime: string;
+  matchDate: Date;
 
   @Column
   matchResult: number; //0 = draw, 1 = t1 won, 2 = t2 won
@@ -18,15 +14,15 @@ export default class Match extends Model {
 
   @ForeignKey(() => Team)
   @Column
-  t1_id: number;
+  teamId1: number;
 
-  @HasOne(() => Team, 't1_id')
-  t1: Team;
+  @BelongsTo(() => Team, 'teamId1')
+  team1: Team;
 
   @ForeignKey(() => Team)
   @Column
-  t2_id: number;
+  teamId2: number;
 
-  @HasOne(() => Team, 't2_id')
-  t2: Team;
+  @BelongsTo(() => Team, 'teamId2')
+  team2: Team;
 }

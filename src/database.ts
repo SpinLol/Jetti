@@ -1,5 +1,8 @@
 import { Sequelize } from 'sequelize-typescript';
-import Player from './db/models/Player.model';
+import { Player, PlayerH, Team, Match } from './db/models';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+require('dotenv').config();
 
 const sequelize =
   process.env.NODE_ENV == 'development'
@@ -9,6 +12,6 @@ const sequelize =
       })
     : new Sequelize(process.env.DATABASE_URL);
 
-sequelize.addModels([Player]);
+sequelize.addModels([Player, PlayerH, Team, Match]);
 
 export { sequelize };

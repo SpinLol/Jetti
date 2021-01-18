@@ -79,30 +79,35 @@ export default class AddTeamCommand extends Command {
       playerId: foundPlayers[0].id,
       player: foundPlayers[0],
       skillLevel: foundPlayers[0].skillLevel,
+      userTag: foundPlayers[0].userTag,
       historyDate: now,
     });
     const player2 = new PlayerH({
       playerId: foundPlayers[1].id,
       player: foundPlayers[1],
       skillLevel: foundPlayers[1].skillLevel,
+      userTag: foundPlayers[1].userTag,
       historyDate: now,
     });
     const player3 = new PlayerH({
       playerId: foundPlayers[2].id,
       player: foundPlayers[2],
       skillLevel: foundPlayers[2].skillLevel,
+      userTag: foundPlayers[2].userTag,
       historyDate: now,
     });
     const player4 = new PlayerH({
       playerId: foundPlayers[3].id,
       player: foundPlayers[3],
       skillLevel: foundPlayers[3].skillLevel,
+      userTag: foundPlayers[3].userTag,
       historyDate: now,
     });
     const player5 = new PlayerH({
       playerId: foundPlayers[4].id,
       player: foundPlayers[4],
       skillLevel: foundPlayers[4].skillLevel,
+      userTag: foundPlayers[4].userTag,
       historyDate: now,
     });
     await player1.save();

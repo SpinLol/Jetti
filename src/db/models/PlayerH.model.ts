@@ -1,4 +1,4 @@
-import { Column, DataType, Model, Table, ForeignKey, BelongsTo, HasMany, HasOne } from 'sequelize-typescript';
+import { Column, DataType, Model, Table, ForeignKey, BelongsTo, HasMany } from 'sequelize-typescript';
 import Player from './Player.model';
 import Team from './Team.model';
 
@@ -13,6 +13,9 @@ export default class PlayerH extends Model {
 
   @Column(DataType.FLOAT)
   skillLevel: number;
+
+  @Column
+  userTag: string;
 
   @HasMany(() => Team, 'playerId1')
   team1: Team;

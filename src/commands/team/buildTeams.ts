@@ -2,6 +2,7 @@ import { Message } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { Player } from '../../db/models';
 import { shuffle } from '../../util/arrayHelper';
+import { neededUsers } from '../../constants';
 
 export default class buildTeamsCommand extends Command {
   randomAliases = ['r', 'rand', 'random'];
@@ -16,7 +17,6 @@ export default class buildTeamsCommand extends Command {
 
   async run(msg: CommandoMessage, rawArgs: string) {
     const end = new Message(null, null, msg.channel);
-    const neededUsers = 10;
     const tries = 10;
     let userIds: string[];
     const channel = msg.member.voice.channel;

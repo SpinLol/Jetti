@@ -5,6 +5,13 @@ module.exports = {
     dialect: 'sqlite',
     storage: 'src/db/db.sqlite',
   },
+  devPostgres: {
+    username: 'postgres',
+    password: 'password',
+    database: 'postgres',
+    host: 'localhost',
+    dialect: 'postgres',
+  },
   production: {
     username: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,

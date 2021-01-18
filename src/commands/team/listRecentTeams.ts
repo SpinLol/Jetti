@@ -1,0 +1,74 @@
+import { Message } from 'discord.js';
+import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+
+import { Team } from '../../db/models';
+import { PlayerH } from '../../db/models';
+
+interface PromptArgs {
+  amount: number;
+}
+
+export default class ListTeamsCommand extends Command {
+  constructor(client: CommandoClient) {
+    super(client, {
+      name: 'list-recent-teams',
+      aliases: ['lrt', 'list-latest-teams'],
+      group: 'team',
+      memberName: 'list-recent-teams',
+      description: 'Lists # most recent teams in the database',
+      argsCount: 1,
+      args: [
+        {
+          key: 'amount',
+          prompt: 'How many teams do you want to see (max = 20)',
+          type: 'integer',
+          default: 10,
+        },
+      ],
+    });
+  }
+
+  async run(msg: CommandoMessage, { amount }: PromptArgs) {
+    const end = new Message(null, null, msg.channel);
+    amount = Math.max(0, Math.min(amount, 20));
+
+    const nMostRecentTeams = await Team.findAll({
+      limit: 1,
+      order: [['createdAt', 'DESC']],
+    });
+
+    if (nMostRecentTeams.length == 0 && amount != 0) {
+      msg.say('No teams in database');
+      return end;
+    } else if (nMostRecentTeams.length == 1) {
+      msg.say(`Most recent team in database:`);
+    } else if (nMostRecentTeams.length < amount) {
+      msg.say(`Only found ${nMostRecentTeams.length} team(s):`);
+    } else {
+      msg.say(`${amount} most recent teams teams:`);
+    }
+
+    let res = '```'; // + nMostRecentTeams.length + ' most recent teams:\n';
+    for (const team of nMostRecentTeams) {
+      res += '\n' + (await this.teamToString(team));
+    }
+    res += '\n```';
+    msg.say(res);
+  }
+
+  async teamToString(team: Team): Promise<string> {
+    let res = ('' + team.id).padStart(3) + ' | ' + team.teamName;
+    const playerHs = [];
+
+    playerHs.push(await PlayerH.findOne({ where: { id: team.playerId1 } }));
+    playerHs.push(await PlayerH.findOne({ where: { id: team.playerId2 } }));
+    playerHs.push(await PlayerH.findOne({ where: { id: team.playerId3 } }));
+    playerHs.push(await PlayerH.findOne({ where: { id: team.playerId4 } }));
+    playerHs.push(await PlayerH.findOne({ where: { id: team.playerId5 } }));
+
+    for (const player of playerHs) {
+      res += ' | ' + player.userTag; //maybe print out nicknames?
+    }
+    return res;
+  }
+}

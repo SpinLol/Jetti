@@ -4,7 +4,7 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { Team } from '../../db/models';
 
 interface PromptArgs {
-  teamIdStr: string;
+  teamId: number;
   newTeamName: string;
 }
 
@@ -19,9 +19,9 @@ export default class UpdateTeamCommand extends Command {
       argsCount: 2,
       args: [
         {
-          key: 'teamIdStr',
+          key: 'teamId',
           prompt: 'What is the id of the team?',
-          type: 'string',
+          type: 'integer',
         },
         {
           key: 'newTeamName',
@@ -32,16 +32,15 @@ export default class UpdateTeamCommand extends Command {
     });
   }
 
-  async run(msg: CommandoMessage, { teamIdStr, newTeamName }: PromptArgs) {
+  async run(msg: CommandoMessage, { teamId, newTeamName }: PromptArgs) {
     const end = new Message(null, null, msg.channel);
-    const teamIdInt = parseInt(teamIdStr);
 
     const teamToEdit = await Team.findOne({
-      where: { id: teamIdInt },
+      where: { id: teamId },
     });
 
     if (teamToEdit == null) {
-      msg.say(`Team with ID \`${teamIdStr}\` is not in the database...`);
+      msg.say(`Team with ID \`${teamId}\` is not in the database...`);
       return end;
     }
 
@@ -50,7 +49,7 @@ export default class UpdateTeamCommand extends Command {
     teamToEdit.teamName = newTeamName;
     teamToEdit.save();
 
-    msg.say(`Team \`${teamIdStr}\` was renamed to \`${teamToEdit.teamName}\``);
+    msg.say(`Team \`${teamId}\` was renamed to \`${teamToEdit.teamName}\``);
     return end;
   }
 }

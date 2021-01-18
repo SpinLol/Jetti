@@ -4,7 +4,7 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { Team } from '../../db/models';
 
 interface PromptArgs {
-  teamIdStr: string;
+  teamId: number;
 }
 
 export default class DeleteTeamCommand extends Command {
@@ -18,30 +18,29 @@ export default class DeleteTeamCommand extends Command {
       argsCount: 1,
       args: [
         {
-          key: 'teamIdStr',
+          key: 'teamId',
           prompt: 'What is the id of the team?',
-          type: 'string',
+          type: 'integer',
         },
       ],
     });
   }
 
-  async run(msg: CommandoMessage, { teamIdStr }: PromptArgs) {
+  async run(msg: CommandoMessage, { teamId }: PromptArgs) {
     const end = new Message(null, null, msg.channel);
-    const teamIdInt = parseInt(teamIdStr);
 
     const teamToDelete = await Team.findOne({
-      where: { id: teamIdInt },
+      where: { id: teamId },
     });
 
     if (teamToDelete == null) {
-      msg.say(`Team with ID \`${teamIdStr}\` is not in the database...`);
+      msg.say(`Team with ID \`${teamId}\` is not in the database...`);
       return end;
     }
 
     await teamToDelete.destroy();
 
-    msg.say(`Team \`${teamIdStr}\` was successfully removed from the database!`);
+    msg.say(`Team \`${teamId}\` was successfully removed from the database!`);
     return end;
   }
 }

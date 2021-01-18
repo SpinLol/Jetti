@@ -33,9 +33,11 @@ export default class ListTeamsCommand extends Command {
     amount = Math.max(0, Math.min(amount, 20));
 
     const nMostRecentTeams = await Team.findAll({
-      limit: 1,
+      limit: amount,
       order: [['createdAt', 'DESC']],
     });
+
+    nMostRecentTeams.reverse();
 
     if (nMostRecentTeams.length == 0 && amount != 0) {
       msg.say('No teams in database');
@@ -57,7 +59,7 @@ export default class ListTeamsCommand extends Command {
   }
 
   async teamToString(team: Team): Promise<string> {
-    let res = ('' + team.id).padStart(3) + ' | ' + team.teamName;
+    let res = ('' + team.id).padStart(3) + ' | ' + team.teamName + ' | ';
     const playerHs = [];
 
     playerHs.push(await PlayerH.findOne({ where: { id: team.playerId1 } }));
@@ -67,8 +69,8 @@ export default class ListTeamsCommand extends Command {
     playerHs.push(await PlayerH.findOne({ where: { id: team.playerId5 } }));
 
     for (const player of playerHs) {
-      res += ' | ' + player.userTag; //maybe print out nicknames?
+      res += player.userTag.substring(0, player.userTag.length - 5) + ', '; //maybe print out nicknames?
     }
-    return res;
+    return res.substring(0, res.length - 2);
   }
 }

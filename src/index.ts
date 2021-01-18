@@ -7,7 +7,7 @@ require('dotenv').config();
 
 const client = new CommandoClient({
   owner: process.env.BOT_OWNER,
-  commandPrefix: process.env.NODE_ENV === 'development' ? '#' : '!',
+  commandPrefix: process.env.NODE_ENV === 'development' ? '$' : '!',
 });
 
 client
@@ -40,6 +40,7 @@ client.registry
   .registerGroups([
     ['team', 'Team commands'],
     ['player', 'Player commands'],
+    ['match', 'Match commands'],
   ])
   .registerDefaults()
   .registerCommandsIn({

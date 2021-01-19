@@ -1,6 +1,29 @@
-# Valorant Team Builder
-
-Discord Bot which creates 2 balanced teams for a custom Valorant match.
+<p align="center">
+   <img width="75%" src="images/Jetti.png" alt="Logo">
+</p>
+<p align="center">
+   <b>Custom game teams builder for Valorant & League of Legends</b>
+</p>
+<p align="center">
+   <a href="https://playvalorant.com/en-gb/">
+      <img src="https://img.shields.io/badge/Game-Valorant-blue" alt="Valorant Badge">
+   </a>
+   <a href="https://na.leagueoflegends.com/en-gb/">
+      <img src="https://img.shields.io/badge/Game-League_of_Legends-blue" alt="Valorant Badge">
+   </a>
+   <a href="https://discord.com/">
+      <img src="https://img.shields.io/badge/Discord-BOT-blue" alt="Discord BOT Badge">
+   </a>
+   <a href="https://github.com/Glup3/Jetti/graphs/contributors">
+      <img src="https://img.shields.io/github/contributors/glup3/jetti?color=success" alt="Contributors Badge">
+   </a>
+   <a href="https://github.com/glup3/jetti/blob/master/LICENSE.txt">
+      <img src="https://img.shields.io/github/license/glup3/jetti.svg?color=green" alt="License Badge">
+   </a>
+   <a href="https://github.com/koekeishiya/yabai/releases">
+      <img src="https://img.shields.io/github/v/tag/glup3/jetti" alt="Version Badge">
+   </a>
+</p>
 
 ## Quick Overview
 
@@ -103,7 +126,7 @@ heroku config:get DATABASE_URL -a <HEROKU_APP_NAME> | xargs pgweb --url
 
 ## Skill Level Formula
 
-Every player gets a skill level (weight). They are from 1 to 5 (low to high).
+Every player gets a skill level (weight). They are from 1 to 6 (low to high).
 
 - Level 1 = Iron
 - Level 2 = Bronze
@@ -122,7 +145,57 @@ while no fair teams:
 
 ## Commands
 
-TBD
+Generated command list by Jetti (last updated: 19th January 2021)
+
+```
+To run a command in any server, use @Jetti#4545 command. For example, @Jetti#4545 prefix.
+To run a command in this DM, simply use command with no prefix.
+
+Use help <command> to view detailed information about a specific command.
+Use help all to view a list of all commands, not just available ones.
+
+All commands
+
+Team commands
+add-team: Creates a new team with 5 players
+build: Drafts two fair or unfair teams
+change-team-player: Changes a player with another one.
+delete-team: Deletes a team entry in the database
+get-team: Get info about team
+list-recent-teams: Lists # most recent teams in the database
+number-pick: Provides users with numbers for "picking-by-numbers"
+update-team-name: Changes the team-name of a team entry in the database
+
+Player commands
+add-player: Adds a new Player to the db
+get-player: Get Information about a Player
+missing-players: Lists all players in the voice chat who are not in the database.
+list-players: Lists all players in the database
+list-skill-levels: Lists values for skill levels
+remove-player: Removes a given Player from the database
+update-player: Updates the level of a Player
+
+Match commands
+add-match: Creates a new match with 2 teams
+delete-match: Deletes a match entry in the database
+get-match: Get info about match
+store-image-match: Stores the link of the game screenshot as a link (string). Image must be embedded with message.
+update-match-result: Updates match result for given match ID
+
+Commands
+groups: Lists all command groups.
+enable: Enables a command or command group.
+disable: Disables a command or command group.
+reload: Reloads a command or command group.
+load: Loads a new command.
+unload: Unloads a command.
+
+Utility
+help: Displays a list of available commands, or detailed information for a specified command.
+prefix: Shows or sets the command prefix.
+ping: Checks the bot's ping to the Discord server.
+eval: Executes JavaScript code.
+```
 
 ## Resources
 

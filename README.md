@@ -30,6 +30,12 @@
 `Jetti` creates balanced teams for you to play fair custom games in `Valorant` or `League of Legends`. All you have to do is add your players to the database. Now you can build teams by:
 
 ```
+// add player to database
+!add-player @user <skillLevel>
+
+// list all skill levels
+!ls
+
 // pinging 10 players
 !build @user1 @user2 @user3 @user4 @user5 @user6 @user7 @user8 @user9 @user10
 

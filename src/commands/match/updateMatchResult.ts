@@ -8,14 +8,14 @@ interface PromptArgs {
   matchResult: number;
 }
 
-export default class StoreImageCommand extends Command {
+export default class UpdateMatchResultCommand extends Command {
   constructor(client: CommandoClient) {
     super(client, {
-      name: 'store-image-match',
-      aliases: ['sim', 'screenshot'],
+      name: 'update-match-result',
+      aliases: ['umr'],
       group: 'match',
-      memberName: 'store-image-match',
-      description: 'Stores the link of the game screenshot as a link (string). Image must be embedded with message.',
+      memberName: 'update-match-result',
+      description: 'Updates match result for given match ID',
       argsCount: 2,
       args: [
         {
@@ -37,22 +37,19 @@ export default class StoreImageCommand extends Command {
     const end = new Message(null, null, msg.channel);
 
     const match = await Match.findOne({ where: { id: matchId } });
+
     if (match == null) {
       msg.say(`Match with ID ${matchId} was not found!`);
       return end;
     }
 
-    if (msg.attachments.size == 0) {
-      msg.say(`No attached image detected. Write command as comment when uploading image.`);
-      return end;
-    }
+    const oldMatchResult = match.getOutcome();
 
     match.matchResult = matchResult;
-    match.screenshotPath = msg.attachments.first().url;
     match.save();
 
     msg.say(
-      `Added \`${match.screenshotPath}\` to Match with ID \`${match.id}\`, and set result as\`${match.matchResult}\``,
+      `Match Result was changed from \`${oldMatchResult}\` to \`${match.getOutcome()}\` for Match ID ${match.id}`,
     );
     return end;
   }

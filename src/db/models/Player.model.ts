@@ -1,7 +1,7 @@
 import { Column, DataType, Model, Table, Unique, HasMany } from 'sequelize-typescript';
 import PlayerH from '../../db/models/PlayerH.model';
 
-@Table
+@Table({ tableName: 'Players' })
 export default class Player extends Model {
   @Unique
   @Column

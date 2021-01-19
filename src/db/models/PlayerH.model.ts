@@ -2,7 +2,7 @@ import { Column, DataType, Model, Table, ForeignKey, BelongsTo, HasMany } from '
 import Player from './Player.model';
 import Team from './Team.model';
 
-@Table
+@Table({ tableName: 'PlayerH' })
 export default class PlayerH extends Model {
   @ForeignKey(() => Player)
   @Column

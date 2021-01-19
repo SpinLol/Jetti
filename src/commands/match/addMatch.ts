@@ -25,7 +25,7 @@ export default class AddMatchCommand extends Command {
         },
         {
           key: 'teamId2',
-          prompt: 'What is the ID from team1?',
+          prompt: 'What is the ID from team2?',
           type: 'integer',
         },
       ],

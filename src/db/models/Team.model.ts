@@ -2,7 +2,7 @@ import { Column, Model, Table, ForeignKey, HasMany, BelongsTo } from 'sequelize-
 import PlayerH from '../../db/models/PlayerH.model';
 import Match from '../../db/models/Match.model';
 
-@Table
+@Table({ tableName: 'Team' })
 export default class Team extends Model {
   @Column
   teamName: string;

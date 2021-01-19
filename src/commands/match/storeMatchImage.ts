@@ -40,8 +40,7 @@ export default class StoreImageCommand extends Command {
       return end;
     }
 
-    // const match = await Match.findOne({ where: { id: matchId } });
-    const match = await Match.findOne({ where: { id: matchId }, include: [{ all: true, include: [{ all: true }] }] });
+    const match = await Match.findOne({ where: { id: matchId } });
     if (match == null) {
       msg.say(`Match with ID ${matchId} was not found!`);
       return end;
@@ -61,8 +60,9 @@ export default class StoreImageCommand extends Command {
     match.screenshotPath = msg.attachments.first().url;
     match.save();
 
-
-    msg.say(`Added \`${match.screenshotPath}\` to Match with ID \`${match.id}\`, and set result as\`${match.matchResult}\`); //.url is same as.attachment
+    msg.say(
+      `Added \`${match.screenshotPath}\` to Match with ID \`${match.id}\`, and set result as\`${match.matchResult}\``,
+    );
     return end;
   }
 }

@@ -1,7 +1,7 @@
 import { Column, Model, Table, ForeignKey, BelongsTo } from 'sequelize-typescript';
 import Team from '../../db/models/Team.model';
 
-@Table
+@Table({ tableName: 'Match' })
 export default class Match extends Model {
   @Column({ defaultValue: 0 })
   matchResult: number; //0 = draw, 1 = t1 won, 2 = t2 won

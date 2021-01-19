@@ -35,11 +35,15 @@ export default class GetMatchCommand extends Command {
       return new Message(null, null, msg.channel);
     }
 
-    let message = `Match ${match.id} - ${match.getOutcome()}\n`;
+    const hasScreenshot = match.screenshotPath != null;
+
+    let message = `Match ${match.id} - ${match.getOutcome()}${!hasScreenshot ? ` (no screenshot provided)` : ''}\n`;
     message += printTeam(match.team1);
     message += printTeam(match.team2);
 
-    msg.say(message);
+    const embed = { embed: { image: { url: `${match.screenshotPath}` } } };
+
+    msg.say(message, hasScreenshot ? embed : {});
     return new Message(null, null, msg.channel);
   }
 }

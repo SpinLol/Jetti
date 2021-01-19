@@ -17,7 +17,7 @@
    <a href="https://github.com/Glup3/Jetti/graphs/contributors">
       <img src="https://img.shields.io/github/contributors/glup3/jetti?color=success" alt="Contributors Badge">
    </a>
-   <a href="https://github.com/glup3/jetti/blob/master/LICENSE.txt">
+   <a href="https://github.com/glup3/jetti/blob/main/LICENSE.txt">
       <img src="https://img.shields.io/github/license/glup3/jetti.svg?color=green" alt="License Badge">
    </a>
    <a href="https://github.com/koekeishiya/yabai/releases">
@@ -25,29 +25,58 @@
    </a>
 </p>
 
-## Quick Overview
+## About The Project
 
-tbd
+`Jetti` creates balanced teams for you to play fair custom games in `Valorant` or `League of Legends`. All you have to do is add your players to the database. Now you can build teams by:
 
-## Developer Environment
+```
+// pinging 10 players
+!build @user1 @user2 @user3 @user4 @user5 @user6 @user7 @user8 @user9 @user10
 
-Best Editor: [VS Code](https://code.visualstudio.com/)
+// or by simply just having 10 players in the voice chat
+!build
 
-### Plugins for VS Code
+// you can also ping your missing players
+// example | 8 in voice chat, 2 are missing:
+!build @user9 @user10
 
-- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
-- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
-- [Bracket Pair Colorizer 2 (Recommendation)](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2)
-- [Material Icon Theme (Recommendation)](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme)
-- [One Dark Pro (Recommendation)](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme)
+```
 
-### Autoformat On Save:
+`Jetti` can also save Teams and Matches. Upload a screenshot of the scoreboard at the end of the game to record your cool gamer moments!
 
-1. Press `Ctrl + ,` (Settings UI) or `Ctrl + Shift + P` > `Open Settings (UI)`
-2. Search for `format on save`
-3. Tick the box with the title `Editor: Format On Save`
+Create Teams (returns `TeamID`)
 
-![Format on Save](images/format-on-save.png)
+```
+!add-team <TeamName1> @user1 @user2 @user3 @user4 @user5
+!add-team <TeamName2> @user1 @user2 @user3 @user4 @user5
+```
+
+Create Match between two Teams (returns `MatchID`)
+
+```
+!add-match <TeamID1> <TeamID2>
+```
+
+Upload the scoreboard and annotate who won  
+(Draw = 0, Team 1 won = 1, Team 2 won = 2)
+
+```
+!screenshot <MatchID> <[0, 1, or 2]>
+```
+
+### Built with
+
+All the cool technologies we used:
+
+- TypeScript
+- Discord.js
+- Discord.js Commando
+- Sequelize
+- Sqlite & Postgres
+
+## Getting Started
+
+TBD
 
 ## How to start/develop
 
@@ -207,6 +236,26 @@ eval: Executes JavaScript code.
 - https://github.com/RobinBuschmann/sequelize-typescript#usage
 - https://dev.to/anayooleru/modifying-an-existing-sequelize-migration-1mnn
 - https://stackoverflow.com/questions/51509499/how-do-i-view-a-postgresql-database-on-heroku-with-a-gui
+
+## Developer Environment
+
+Best Editor: [VS Code](https://code.visualstudio.com/)
+
+### Plugins for VS Code
+
+- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+- [Bracket Pair Colorizer 2 (Recommendation)](https://marketplace.visualstudio.com/items?itemName=CoenraadS.bracket-pair-colorizer-2)
+- [Material Icon Theme (Recommendation)](https://marketplace.visualstudio.com/items?itemName=PKief.material-icon-theme)
+- [One Dark Pro (Recommendation)](https://marketplace.visualstudio.com/items?itemName=zhuangtongfa.Material-theme)
+
+### Autoformat On Save:
+
+1. Press `Ctrl + ,` (Settings UI) or `Ctrl + Shift + P` > `Open Settings (UI)`
+2. Search for `format on save`
+3. Tick the box with the title `Editor: Format On Save`
+
+![Format on Save](images/format-on-save.png)
 
 ## Contributors
 

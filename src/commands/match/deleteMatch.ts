@@ -12,7 +12,7 @@ export default class DeleteMatchCommand extends Command {
     super(client, {
       name: 'delete-match',
       aliases: ['dm', 'remove-match', 'rm'],
-      group: 'team',
+      group: 'match',
       memberName: 'delete-match',
       description: 'Deletes a match entry in the database',
       argsCount: 1,

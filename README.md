@@ -95,6 +95,12 @@ I use [pgweb](http://sosedoff.github.io/pgweb/) as GUI for our postgres instance
 pgweb --host localhost
 ```
 
+### View Heroku Postgres DB in pgweb
+
+```
+heroku config:get DATABASE_URL -a <HEROKU_APP_NAME> | xargs pgweb --url
+```
+
 ## Skill Level Formula
 
 Every player gets a skill level (weight). They are from 1 to 5 (low to high).

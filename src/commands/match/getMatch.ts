@@ -13,7 +13,7 @@ export default class GetMatchCommand extends Command {
     super(client, {
       name: 'get-match',
       aliases: ['gm'],
-      group: 'team',
+      group: 'match',
       memberName: 'get-match',
       description: 'Get info about match',
       argsCount: 1,

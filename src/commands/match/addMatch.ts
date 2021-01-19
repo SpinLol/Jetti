@@ -13,7 +13,7 @@ export default class AddMatchCommand extends Command {
     super(client, {
       name: 'add-match',
       aliases: ['am'],
-      group: 'team',
+      group: 'match',
       memberName: 'add-match',
       description: 'Creates a new match with 2 teams',
       argsCount: 2,

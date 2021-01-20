@@ -82,29 +82,42 @@ All the cool technologies we used:
 
 ## Getting Started
 
-TBD
+### Prerequisites
 
-## How to start/develop
+- nodeJS (v12.0 or higher)
+- [Discord Bot Application](https://discordpy.readthedocs.io/en/latest/discord.html)
 
-Do this once to install dependencies.
+### Installation & Usage
 
-```bash
-npm install
-```
+1. Clone or download the repo
 
-Changes in the `src` directory will automatically restart the bot.
+   ```
+   $ git clone https://github.com/Glup3/Jetti.git
+   ```
 
-```bash
-npm start
-```
+2. Install NPM packages
 
-## Config File
+   ```
+   $ npm install
+   ```
 
-Copy the `.env.example` file and name it `.env`. Change those fields:
+3. Create an `.env` file in the root folder and enter the secrets
 
-`owner` = userID who has all rights over the bot.
+   ```
+   BOT_OWNER=12312312423321
+   BOT_TOKEN=YOUR_SUPER_SECRET_BOT_TOKEN_YOU_SHOULD_NEVER_SHARE
+   ```
 
-`token` = your secret Bot token, you should never share!
+4. Run the discord bot locally
+
+   ```
+   $ npm start
+   ```
+
+5. Generate the database schema
+   ```
+   $ npx sequelize-cli db:migrate
+   ```
 
 ## Migrations
 
@@ -247,6 +260,14 @@ eval: Executes JavaScript code.
 
 Best Editor: [VS Code](https://code.visualstudio.com/)
 
+Other choices:
+
+- Atom
+- Sublime
+- Webstorm
+- VIM
+- ...
+
 ### Plugins for VS Code
 
 - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
@@ -258,10 +279,19 @@ Best Editor: [VS Code](https://code.visualstudio.com/)
 ### Autoformat On Save:
 
 1. Press `Ctrl + ,` (Settings UI) or `Ctrl + Shift + P` > `Open Settings (UI)`
-2. Search for `format on save`
-3. Tick the box with the title `Editor: Format On Save`
 
-![Format on Save](images/format-on-save.png)
+2. Search for `format on save`
+
+3. Tick the box with the title `Editor: Format On Save`
+   ![Format on Save](images/format-on-save.png)
+
+## Roadmap
+
+See the [open issues](https://github.com/Glup3/Jetti/issues) for a list of proposed features (and known issues).
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
 
 ## Contributors
 

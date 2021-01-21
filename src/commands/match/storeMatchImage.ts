@@ -47,13 +47,15 @@ export default class StoreImageCommand extends Command {
       return end;
     }
 
+    const oldScreenshot = match.screenshotPath;
     match.matchResult = matchResult;
     match.screenshotPath = msg.attachments.first().url;
     match.save();
 
-    msg.say(
-      `Added \`${match.screenshotPath}\` to Match with ID \`${match.id}\`, and set result as\`${match.matchResult}\``,
-    );
+    let message = `Changed Screenshot from ${oldScreenshot} to ${match.screenshotPath}\n`;
+    message += `for Match ID ${match.id} and set result to ${matchResult}`;
+
+    msg.say(message);
     return end;
   }
 }

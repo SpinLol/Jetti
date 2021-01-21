@@ -25,9 +25,9 @@ export default class Match extends Model {
 
   getOutcome(): string {
     if (this.matchResult == 1) {
-      return 'Team 1 won';
+      return `Team ${this.team1.teamName} won`;
     } else if (this.matchResult == 2) {
-      return 'Team 2 won';
+      return `Team ${this.team2.teamName} won`;
     }
 
     return 'Draw';

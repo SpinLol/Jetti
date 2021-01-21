@@ -36,7 +36,7 @@ export default class UpdateMatchResultCommand extends Command {
   async run(msg: CommandoMessage, { matchId, matchResult }: PromptArgs) {
     const end = new Message(null, null, msg.channel);
 
-    const match = await Match.findOne({ where: { id: matchId } });
+    const match = await Match.findOne({ where: { id: matchId }, include: [{ all: true }] });
 
     if (match == null) {
       msg.say(`Match with ID ${matchId} was not found!`);

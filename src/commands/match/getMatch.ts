@@ -37,7 +37,9 @@ export default class GetMatchCommand extends Command {
 
     const hasScreenshot = match.screenshotPath != null;
 
-    let message = `Match ${match.id} - ${match.getOutcome()}${!hasScreenshot ? ` (no screenshot provided)` : ''}\n`;
+    let message = `\`Team ${match.team1.teamName}\` vs \`Team ${match.team2.teamName}\`\n`;
+    message += `${match.getOutcome()} | Match ID: ${matchId} `;
+    message += !hasScreenshot ? `(no screenshot provided)\n` : '\n';
     message += printTeam(match.team1);
     message += printTeam(match.team2);
 

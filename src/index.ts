@@ -1,5 +1,7 @@
 import { CommandoClient } from 'discord.js-commando';
 import path from 'path';
+import { botStatus } from './constants';
+import { randomStatus } from './core/status';
 import { sequelize } from './database';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
@@ -8,6 +10,10 @@ require('dotenv').config();
 const client = new CommandoClient({
   owner: process.env.BOT_OWNER,
   commandPrefix: process.env.NODE_ENV === 'development' ? '$' : '!',
+  presence: {
+    activity: botStatus[0],
+    status: 'dnd',
+  },
 });
 
 client
@@ -23,10 +29,7 @@ client
       console.error('Unable to connect to database.', error);
     }
 
-    await client.user.setPresence({
-      activity: { name: 'with your heart ❤', type: 'PLAYING' },
-      status: 'dnd',
-    });
+    randomStatus(client);
     console.log('Client Presence was set successfully!');
   })
   .on('disconnect', () => {

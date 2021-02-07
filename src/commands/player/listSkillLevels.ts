@@ -1,4 +1,3 @@
-import { Message } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 
 export default class AddPlayerCommand extends Command {
@@ -23,8 +22,7 @@ export default class AddPlayerCommand extends Command {
   }
 
   async run(msg: CommandoMessage) {
-    msg.say(this.printAllSkills());
-    return new Message(null, null, msg.channel);
+    return msg.say(this.printAllSkills());
   }
 
   printAllSkills(): string {

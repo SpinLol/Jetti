@@ -1,4 +1,3 @@
-import { Message } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { printTeam } from '../../core/print';
 
@@ -31,11 +30,9 @@ export default class GetTeamCommand extends Command {
     const team = await Team.findOne({ where: { id: teamId }, include: [{ all: true }] });
 
     if (team == null) {
-      msg.say(`Team \`${teamId}\` was not found!`);
-      return new Message(null, null, msg.channel);
+      return msg.say(`Team \`${teamId}\` was not found!`);
     }
 
-    msg.say(printTeam(team));
-    return new Message(null, null, msg.channel);
+    return msg.say(printTeam(team));
   }
 }

@@ -1,4 +1,3 @@
-import { Message } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 
 import { Match } from '../../db/models';
@@ -27,18 +26,14 @@ export default class DeleteMatchCommand extends Command {
   }
 
   async run(msg: CommandoMessage, { matchId }: PromptArgs) {
-    const end = new Message(null, null, msg.channel);
-
     const match = await Match.findOne({ where: { id: matchId } });
 
     if (match == null) {
-      msg.say(`Match with ID \`${matchId}\` is not in the database...`);
-      return end;
+      return msg.say(`Match with ID \`${matchId}\` is not in the database...`);
     }
 
     await match.destroy();
 
-    msg.say(`Match \`${matchId}\` was successfully removed from the database!`);
-    return end;
+    return msg.say(`Match \`${matchId}\` was successfully removed from the database!`);
   }
 }

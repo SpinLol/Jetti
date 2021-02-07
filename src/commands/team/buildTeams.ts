@@ -1,4 +1,3 @@
-import { Message } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { Player } from '../../db/models';
 import { shuffle } from '../../util/arrayHelper';
@@ -16,7 +15,6 @@ export default class buildTeamsCommand extends Command {
   }
 
   async run(msg: CommandoMessage, rawArgs: string) {
-    const end = new Message(null, null, msg.channel);
     const tries = 10;
     let userIds: string[];
     const channel = msg.member.voice.channel;
@@ -26,72 +24,54 @@ export default class buildTeamsCommand extends Command {
 
     if (rawArgs.trim() === '') {
       if (channel == null) {
-        msg.reply('You are not in a voice channel!');
-        return end;
+        return msg.reply('You are not in a voice channel!');
       }
 
       if (channel.members.size < neededUsers) {
-        msg.say('There are not enough players in the voice channel.');
-        return end;
+        return msg.say('There are not enough players in the voice channel.');
       } else if (channel.members.size > neededUsers) {
-        msg.say('There are too many players in the voice channel. Can not choose players.');
-        return end;
+        return msg.say('There are too many players in the voice channel. Can not choose players.');
       }
 
       userIds = channel.members.map((_, k) => k);
-      await this.buildTeams(msg, userIds, neededUsers, tries, isRandom);
-      return end;
+      return await this.buildTeams(msg, userIds, neededUsers, tries, isRandom);
     }
 
     if (channel == null && msg.mentions.users.size == 0) {
-      msg.reply('You are not in a voice channel and forgot to mention enough players.');
-      return end;
+      return msg.reply('You are not in a voice channel and forgot to mention enough players.');
     }
 
     if (msg.mentions.users.size == 0) {
-      msg.say('You forgot to choose the remaining players.');
-      return end;
+      return msg.say('You forgot to choose the remaining players.');
     }
 
     if (msg.mentions.users.size == neededUsers) {
       userIds = msg.mentions.users.map((_, k) => k);
-      await this.buildTeams(msg, userIds, neededUsers, tries, isRandom);
-      return end;
+      return await this.buildTeams(msg, userIds, neededUsers, tries, isRandom);
     }
 
     if (channel == null) {
-      msg.reply('You are not in a voice channel.');
-      return end;
+      return msg.reply('You are not in a voice channel.');
     }
 
     userIds = channel.members.map((_, k) => k).concat(msg.mentions.users.map((_, k) => k));
 
     if (userIds.length < neededUsers) {
-      msg.reply(`You didn't mention enough players. ${neededUsers - userIds.length} players are missing.`);
-      return end;
+      return msg.reply(`You didn't mention enough players. ${neededUsers - userIds.length} players are missing.`);
     } else if (userIds.length > neededUsers) {
-      msg.reply(`You mentioned too many players. You need ${neededUsers} players, not ${userIds.length}`);
-      return end;
+      return msg.reply(`You mentioned too many players. You need ${neededUsers} players, not ${userIds.length}`);
     }
 
-    await this.buildTeams(msg, userIds, neededUsers, tries, isRandom);
-    return end;
+    return await this.buildTeams(msg, userIds, neededUsers, tries, isRandom);
   }
 
-  async buildTeams(
-    msg: CommandoMessage,
-    userIds: string[],
-    playerCount: number,
-    tries: number,
-    isRandom: boolean,
-  ): Promise<void> {
+  async buildTeams(msg: CommandoMessage, userIds: string[], playerCount: number, tries: number, isRandom: boolean) {
     const half = Math.ceil(playerCount / 2);
     const players = await Player.findAll({ where: { userId: userIds } });
     const maxSkillGap = 1;
 
     if (players.length < playerCount) {
-      msg.say(`${playerCount - players.length} players are not in the database. Add them first and try again.`);
-      return;
+      return msg.say(`${playerCount - players.length} players are not in the database. Add them first and try again.`);
     }
 
     for (let i = 0; i < tries; i++) {
@@ -108,19 +88,18 @@ export default class buildTeamsCommand extends Command {
         const teamNames1 = team1.reduce(this.printTeamMembers, '');
         const teamNames2 = team2.reduce(this.printTeamMembers, '');
 
-        msg.say(this.printTeams(teamNames1, teamNames2));
-        return;
+        return msg.say(this.printTeams(teamNames1, teamNames2));
       }
     }
 
-    msg.say(`Could not create fair teams after trying ${tries} times. Try again.`);
+    return msg.say(`Could not create fair teams after trying ${tries} times. Try again.`);
   }
 
   printTeams(team1: string, team2: string): string {
     let res = '```\n';
     res += 'Team 1';
     res += team1;
-    res += '\nTeam2';
+    res += '\nTeam 2';
     res += team2;
     res += '\n```';
 

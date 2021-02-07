@@ -1,9 +1,7 @@
-import { Message } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { printTeam } from '../../core/print';
 
 import { Team } from '../../db/models';
-import { PlayerH } from '../../db/models';
 
 interface PromptArgs {
   amount: number;
@@ -30,7 +28,6 @@ export default class ListTeamsCommand extends Command {
   }
 
   async run(msg: CommandoMessage, { amount }: PromptArgs) {
-    const end = new Message(null, null, msg.channel);
     amount = Math.max(0, Math.min(amount, 20));
 
     const nMostRecentTeams = await Team.findAll({
@@ -41,8 +38,7 @@ export default class ListTeamsCommand extends Command {
     nMostRecentTeams.reverse();
 
     if (nMostRecentTeams.length == 0 && amount != 0) {
-      msg.say('No teams in database');
-      return end;
+      return msg.say('No teams in database');
     } else if (nMostRecentTeams.length == 1) {
       msg.say(`Most recent team in database:`);
     } else if (nMostRecentTeams.length < amount) {
@@ -56,7 +52,7 @@ export default class ListTeamsCommand extends Command {
       res += '\n' + (await printTeam(team));
     }
     res += '\n```';
-    msg.say(res);
+    return msg.say(res);
   }
 
   // async teamToString(team: Team): Promise<string> {

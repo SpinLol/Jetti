@@ -1,4 +1,4 @@
-import { GuildMember, Message } from 'discord.js';
+import { GuildMember } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 
 import { Player } from '../../db/models';
@@ -19,8 +19,7 @@ export default class ListPlayersCommand extends Command {
     const channel = msg.member.voice.channel;
 
     if (channel == null) {
-      msg.reply('You are not in a voice channel!');
-      return new Message(null, null, msg.channel);
+      return msg.reply('You are not in a voice channel!');
     }
 
     const players = await Player.findAll({
@@ -32,13 +31,11 @@ export default class ListPlayersCommand extends Command {
     const missingUsers = channel.members.filter((_, k) => players.find((p) => p.userId === k) == undefined);
 
     if (missingUsers.size === 0) {
-      msg.say('All Players are in the database! None is missing.');
-      return new Message(null, null, msg.channel);
+      return msg.say('All Players are in the database! None is missing.');
     }
 
     const userList = missingUsers.reduce(this.printUsers, '');
-    msg.say(this.printAllUsers(userList));
-    return new Message(null, null, msg.channel);
+    return msg.say(this.printAllUsers(userList));
   }
 
   printUsers(prev: string, guildUser: GuildMember): string {

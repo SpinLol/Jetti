@@ -1,4 +1,3 @@
-import { Message } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 
 import { Team } from '../../db/models';
@@ -27,20 +26,16 @@ export default class DeleteTeamCommand extends Command {
   }
 
   async run(msg: CommandoMessage, { teamId }: PromptArgs) {
-    const end = new Message(null, null, msg.channel);
-
     const teamToDelete = await Team.findOne({
       where: { id: teamId },
     });
 
     if (teamToDelete == null) {
-      msg.say(`Team with ID \`${teamId}\` is not in the database...`);
-      return end;
+      return msg.say(`Team with ID \`${teamId}\` is not in the database...`);
     }
 
     await teamToDelete.destroy();
 
-    msg.say(`Team \`${teamId}\` was successfully removed from the database!`);
-    return end;
+    return msg.say(`Team \`${teamId}\` was successfully removed from the database!`);
   }
 }

@@ -1,4 +1,3 @@
-import { Message } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 
 import { Match, Team } from '../../db/models';
@@ -33,20 +32,16 @@ export default class AddMatchCommand extends Command {
   }
 
   async run(msg: CommandoMessage, { teamId1, teamId2 }: PromptArgs) {
-    const end = new Message(null, null, msg.channel);
-
     const team1 = await Team.findOne({ where: { id: teamId1 } });
 
     if (team1 == null) {
-      msg.say(`Couldn't find team 1 with ID ${teamId1}`);
-      return end;
+      return msg.say(`Couldn't find team 1 with ID ${teamId1}`);
     }
 
     const team2 = await Team.findOne({ where: { id: teamId2 } });
 
     if (team2 == null) {
-      msg.say(`Couldn't find team 2 with ID ${teamId2}`);
-      return end;
+      return msg.say(`Couldn't find team 2 with ID ${teamId2}`);
     }
 
     const match = new Match({
@@ -56,7 +51,8 @@ export default class AddMatchCommand extends Command {
 
     await match.save();
 
-    msg.say(`Successfully created Match (ID: ${match.id}) with Team1 (ID: ${team1.id}) and Team2 (ID: ${team2.id})`);
-    return end;
+    return msg.say(
+      `Successfully created Match (ID: ${match.id}) with Team1 (ID: ${team1.id}) and Team2 (ID: ${team2.id})`,
+    );
   }
 }

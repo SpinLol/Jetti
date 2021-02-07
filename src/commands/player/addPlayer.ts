@@ -1,4 +1,4 @@
-import { Message, User } from 'discord.js';
+import { User } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 
 import { Player } from '../../db/models';
@@ -39,8 +39,7 @@ export default class AddPlayerCommand extends Command {
     });
 
     if (foundPlayer != null) {
-      msg.say(`Player \`${user.tag}\` was already added!`);
-      return new Message(null, null, msg.channel);
+      return msg.say(`Player \`${user.tag}\` was already added!`);
     }
 
     const player = new Player({
@@ -50,7 +49,6 @@ export default class AddPlayerCommand extends Command {
     });
     await player.save();
 
-    msg.say(`Player \`${player.userTag}\` has the skill level ${player.skillLevel} and was added successfully!`);
-    return new Message(null, null, msg.channel);
+    return msg.say(`Player \`${player.userTag}\` has the skill level ${player.skillLevel} and was added successfully!`);
   }
 }

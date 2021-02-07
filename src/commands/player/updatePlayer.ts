@@ -1,4 +1,4 @@
-import { Message, User } from 'discord.js';
+import { User } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 
 import { Player } from '../../db/models';
@@ -39,14 +39,12 @@ export default class UpdatePlayerCommand extends Command {
     });
 
     if (foundPlayer == null) {
-      msg.say(`Player \`${user.tag}\` is not in database!`);
-      return new Message(null, null, msg.channel);
+      return msg.say(`Player \`${user.tag}\` is not in database!`);
     }
 
     foundPlayer.skillLevel = level;
     foundPlayer.save();
 
-    msg.say(`Player \`${user.tag}\`' skill level has been updated to ${foundPlayer.skillLevel}!`);
-    return new Message(null, null, msg.channel);
+    return msg.say(`Player \`${user.tag}\`' skill level has been updated to ${foundPlayer.skillLevel}!`);
   }
 }

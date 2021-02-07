@@ -8,4 +8,6 @@ export const botStatus: ActivityOptions[] = [
   { name: 'with your feelings ❤', type: 'PLAYING' },
   { name: 'you ❤', type: 'WATCHING' },
   { name: 'your footsteps ❤', type: 'LISTENING' },
+  { name: 'with knifes ❤', type: 'PLAYING' },
+  { name: 'https://jetti-ui.herokuapp.com/', type: 'WATCHING' },
 ];

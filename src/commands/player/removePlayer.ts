@@ -1,4 +1,4 @@
-import { Message, User } from 'discord.js';
+import { User } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 
 import { Player } from '../../db/models';
@@ -32,13 +32,11 @@ export default class RemovePlayerCommand extends Command {
     });
 
     if (player == null) {
-      msg.say(`Player \`${user.tag}\` is not in the database...`);
-      return new Message(null, null, msg.channel);
+      return msg.say(`Player \`${user.tag}\` is not in the database...`);
     }
 
     await player.destroy();
 
-    msg.say(`Player \`${user.tag}\` was successfully removed from the database!`);
-    return new Message(null, null, msg.channel);
+    return msg.say(`Player \`${user.tag}\` was successfully removed from the database!`);
   }
 }

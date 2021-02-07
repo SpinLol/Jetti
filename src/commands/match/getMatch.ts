@@ -1,4 +1,3 @@
-import { Message } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { printTeam } from '../../core/print';
 
@@ -31,8 +30,7 @@ export default class GetMatchCommand extends Command {
     const match = await Match.findOne({ where: { id: matchId }, include: [{ all: true, include: [{ all: true }] }] });
 
     if (match == null) {
-      msg.say(`Match with ID ${matchId} was not found!`);
-      return new Message(null, null, msg.channel);
+      return msg.say(`Match with ID ${matchId} was not found!`);
     }
 
     const hasScreenshot = match.screenshotPath != null;
@@ -45,7 +43,6 @@ export default class GetMatchCommand extends Command {
 
     const embed = { embed: { image: { url: `${match.screenshotPath}` } } };
 
-    msg.say(message, hasScreenshot ? embed : {});
-    return new Message(null, null, msg.channel);
+    return msg.say(message, hasScreenshot ? embed : {});
   }
 }

@@ -4,7 +4,10 @@ import { botStatus } from '../constants';
 
 export const randomStatus = (client: CommandoClient) => {
   cron.schedule('*/30 * * * *', async () => {
-    await client.user.setActivity(botStatus[Math.floor(Math.random() * botStatus.length)]);
+    await client.user.setPresence({
+      activity: botStatus[Math.floor(Math.random() * botStatus.length)],
+      status: 'dnd',
+    });
     console.log('Updated bot activity');
   });
 };

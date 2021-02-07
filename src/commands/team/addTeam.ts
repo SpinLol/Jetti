@@ -1,4 +1,4 @@
-import { Message, User } from 'discord.js';
+import { User } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { neededUsers } from '../../constants';
 
@@ -58,7 +58,6 @@ export default class AddTeamCommand extends Command {
   }
 
   async run(msg: CommandoMessage, { teamName, user1, user2, user3, user4, user5 }: PromptArgs) {
-    const end = new Message(null, null, msg.channel);
     const neededPlayers = Math.ceil(neededUsers / 2);
     const userIds = [user1.id, user2.id, user3.id, user4.id, user5.id];
     const foundPlayers = await Player.findAll({
@@ -66,8 +65,9 @@ export default class AddTeamCommand extends Command {
     });
 
     if (foundPlayers.length < neededPlayers) {
-      msg.say(`Some of your players need to be in the database first! Amount: ${neededPlayers - foundPlayers.length}`);
-      return end;
+      return msg.say(
+        `Some of your players need to be in the database first! Amount: ${neededPlayers - foundPlayers.length}`,
+      );
     }
 
     const now = Date.now();
@@ -124,9 +124,8 @@ export default class AddTeamCommand extends Command {
 
     await team.save();
 
-    msg.say(
+    return msg.say(
       `Successfully created team ${team.teamName} (ID: ${team.id}) with \`${user1.tag}\`, \`${user2.tag}\`, \`${user3.tag}\`, \`${user4.tag}\` & \`${user5.tag}\` `,
     );
-    return end;
   }
 }

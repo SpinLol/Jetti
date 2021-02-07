@@ -1,4 +1,3 @@
-import { Message } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 
 import { Player } from '../../db/models';
@@ -35,8 +34,7 @@ export default class ListPlayersCommand extends Command {
     const players = await Player.findAll(options);
     const playerList = players.reduce(this.printPlayers, '');
 
-    msg.say(this.printAllPlayers(playerList));
-    return new Message(null, null, msg.channel);
+    return msg.say(this.printAllPlayers(playerList));
   }
 
   printPlayers(prev: string, { userTag, skillLevel }: Player, i: number): string {

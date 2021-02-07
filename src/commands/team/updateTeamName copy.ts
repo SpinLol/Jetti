@@ -1,4 +1,3 @@
-import { Message } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 
 import { Team } from '../../db/models';
@@ -33,23 +32,17 @@ export default class UpdateTeamCommand extends Command {
   }
 
   async run(msg: CommandoMessage, { teamId, newTeamName }: PromptArgs) {
-    const end = new Message(null, null, msg.channel);
-
     const teamToEdit = await Team.findOne({
       where: { id: teamId },
     });
 
     if (teamToEdit == null) {
-      msg.say(`Team with ID \`${teamId}\` is not in the database...`);
-      return end;
+      return msg.say(`Team with ID \`${teamId}\` is not in the database...`);
     }
-
-    msg.say(teamToEdit);
 
     teamToEdit.teamName = newTeamName;
     teamToEdit.save();
 
-    msg.say(`Team \`${teamId}\` was renamed to \`${teamToEdit.teamName}\``);
-    return end;
+    return msg.say(`Team \`${teamId}\` was renamed to \`${teamToEdit.teamName}\``);
   }
 }

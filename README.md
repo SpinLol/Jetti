@@ -20,7 +20,7 @@
    <a href="https://github.com/glup3/jetti/blob/main/LICENSE.txt">
       <img src="https://img.shields.io/github/license/glup3/jetti.svg?color=green" alt="License Badge">
    </a>
-   <a href="https://github.com/koekeishiya/yabai/releases">
+   <a href="https://github.com/glup3/jetti/releases">
       <img src="https://img.shields.io/github/v/tag/glup3/jetti" alt="Version Badge">
    </a>
 </p>

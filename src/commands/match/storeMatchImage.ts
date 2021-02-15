@@ -4,7 +4,7 @@ import { Match } from '../../db/models';
 
 interface PromptArgs {
   matchId: number;
-  matchResult: number;
+  matchResult: string;
 }
 
 export default class StoreImageCommand extends Command {
@@ -25,7 +25,7 @@ export default class StoreImageCommand extends Command {
         {
           key: 'matchResult',
           prompt: 'Who won? Team1 = 1, Team2 = 2, Draw = 0',
-          type: 'integer',
+          type: 'string',
           oneOf: ['0', '1', '2'],
         },
       ],
@@ -43,12 +43,12 @@ export default class StoreImageCommand extends Command {
     }
 
     const oldScreenshot = match.screenshotPath;
-    match.matchResult = matchResult;
+    match.matchResult = parseInt(matchResult, 10);
     match.screenshotPath = msg.attachments.first().url;
     match.save();
 
     let message = `Changed Screenshot from ${oldScreenshot} to ${match.screenshotPath}\n`;
-    message += `for Match ID ${match.id} and set result to ${matchResult}`;
+    message += `for Match ID ${match.id} and set result to ${parseInt(matchResult, 10)}`;
 
     return msg.say(message);
   }

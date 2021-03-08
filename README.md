@@ -27,7 +27,7 @@
 
 ## About The Project
 
-`Jetti` creates balanced teams for you to play fair custom games in `Valorant` or `League of Legends`. All you have to do is add your players to the database. Now you can build teams by:
+`Jetti` creates balanced teams for you to play fair custom games in `Valorant` or `League of Legends`. All you have to do is add your players to the database.
 
 ```
 // add player to database
@@ -36,6 +36,13 @@
 // list all skill levels
 !ls
 
+// list all players in the database
+!list
+```
+
+Now you can build teams by:
+
+```
 // pinging 10 players
 !build @user1 @user2 @user3 @user4 @user5 @user6 @user7 @user8 @user9 @user10
 
@@ -45,7 +52,6 @@
 // you can also ping your missing players
 // example | 8 in voice chat, 2 are missing:
 !build @user9 @user10
-
 ```
 
 `Jetti` can also save Teams and Matches. Upload a screenshot of the scoreboard at the end of the game to record your cool gamer moments!
@@ -79,6 +85,7 @@ All the cool technologies we used:
 - Discord.js Commando
 - Sequelize
 - Sqlite & Postgres
+- Heroku
 
 ## Getting Started
 
@@ -86,6 +93,15 @@ All the cool technologies we used:
 
 - nodeJS (v12.0 or higher)
 - [Discord Bot Application](https://discordpy.readthedocs.io/en/latest/discord.html)
+
+#### Bot Permissions
+
+This section lists all permissions the bot needs in order to function properly.
+
+1. `Send Messages`: Required, Jetti responds via messages
+2. `Move Members`: Optional, Jetti can move players into voice channels
+
+The resulting permission code should be `16779264`, if that's not the case, please contact the Glup3.
 
 ### Installation & Usage
 

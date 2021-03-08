@@ -42,7 +42,11 @@ client.registry
     ['player', 'Player commands'],
     ['match', 'Match commands'],
   ])
-  .registerDefaults()
+  .registerDefaultTypes()
+  .registerDefaultGroups()
+  .registerDefaultCommands({
+    unknownCommand: false,
+  })
   .registerCommandsIn({
     filter: /^([^.].*)\.(js|ts)$/,
     dirname: path.join(__dirname, 'commands'),

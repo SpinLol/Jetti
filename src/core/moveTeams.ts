@@ -13,7 +13,7 @@ export const moveTeams = async (team: Team, channel: GuildChannel, msg: Commando
       continue;
     }
 
-    if (user?.voice.channel != null) {
+    if (user.voice.channel != null) {
       await user.voice.setChannel(channel);
     } else {
       await msg.say(`Didn't move \`${user.displayName}\` because he/she isn't in a voice channel`);

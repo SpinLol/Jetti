@@ -1926,6 +1926,20 @@ export type RemovePlayerMutation = (
   )> }
 );
 
+export type UpdatePlayerMutationVariables = Exact<{
+  userId?: Maybe<Scalars['String']>;
+  level?: Maybe<Scalars['Float']>;
+}>;
+
+
+export type UpdatePlayerMutation = (
+  { __typename?: 'Mutation' }
+  & { updatedPlayer?: Maybe<(
+    { __typename?: 'Player' }
+    & Pick<Player, 'id' | 'skillLevel'>
+  )> }
+);
+
 export type GetPlayerQueryVariables = Exact<{
   userId?: Maybe<Scalars['String']>;
 }>;
@@ -1959,6 +1973,17 @@ export const RemovePlayerDocument = gql`
   }
 }
     `;
+export const UpdatePlayerDocument = gql`
+    mutation UpdatePlayer($userId: String, $level: Float) {
+  updatedPlayer: updatePlayer(
+    where: {userId: $userId}
+    data: {skillLevel: {set: $level}}
+  ) {
+    id
+    skillLevel
+  }
+}
+    `;
 export const GetPlayerDocument = gql`
     query GetPlayer($userId: String) {
   player(where: {userId: $userId}) {
@@ -1980,6 +2005,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     RemovePlayer(variables?: RemovePlayerMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RemovePlayerMutation> {
       return withWrapper(() => client.request<RemovePlayerMutation>(RemovePlayerDocument, variables, requestHeaders));
+    },
+    UpdatePlayer(variables?: UpdatePlayerMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdatePlayerMutation> {
+      return withWrapper(() => client.request<UpdatePlayerMutation>(UpdatePlayerDocument, variables, requestHeaders));
     },
     GetPlayer(variables?: GetPlayerQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetPlayerQuery> {
       return withWrapper(() => client.request<GetPlayerQuery>(GetPlayerDocument, variables, requestHeaders));

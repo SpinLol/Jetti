@@ -1,7 +1,7 @@
 import { User } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-
-import { Player } from '../../db/models';
+import { apiClient } from '../../api/client';
+import { getSdk } from '../../api/generated/graphql';
 
 interface PromptArgs {
   user: User;
@@ -11,10 +11,10 @@ export default class RemovePlayerCommand extends Command {
   constructor(client: CommandoClient) {
     super(client, {
       name: 'remove-player',
-      aliases: ['remove', 'del', 'delete', 'r'],
+      aliases: ['rp'],
       group: 'player',
-      memberName: 'remove',
-      description: 'Removes a given Player from the database',
+      memberName: 'remove-player',
+      description: 'Removes a player from the database',
       argsCount: 1,
       args: [
         {
@@ -26,17 +26,22 @@ export default class RemovePlayerCommand extends Command {
     });
   }
 
-  async run(msg: CommandoMessage, { user }: PromptArgs) {
-    const player = await Player.findOne({
-      where: { userId: user.id },
-    });
+  async run(message: CommandoMessage, { user }: PromptArgs) {
+    const sdk = getSdk(apiClient);
 
-    if (player == null) {
-      return msg.say(`Player \`${user.tag}\` is not in the database...`);
+    try {
+      const { player } = await sdk.GetPlayer({ userId: user.id });
+
+      if (player == null) {
+        return message.say(`Player \`${user.tag}\` is not in database!`);
+      }
+
+      const { removedPlayer } = await sdk.RemovePlayer({ userId: user.id });
+
+      return message.say(`Player \`${removedPlayer.userTag}\` was successfully removed from the database!`);
+    } catch (err) {
+      console.error(err);
+      return message.say(`Error happened while trying \`${message.content}\``);
     }
-
-    await player.destroy();
-
-    return msg.say(`Player \`${user.tag}\` was successfully removed from the database!`);
   }
 }

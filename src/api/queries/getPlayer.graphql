@@ -1,0 +1,6 @@
+query GetPlayer($userId: String) {
+  player(where: { userId: $userId }) {
+    skillLevel
+    userTag
+  }
+}

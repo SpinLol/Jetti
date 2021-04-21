@@ -1,0 +1,7 @@
+mutation AddPlayer($userId: String, $level: Float, $userTag: String) {
+  newPlayer: createPlayer(data: { userId: $userId, skillLevel: $level, userTag: $userTag }) {
+    id
+    userTag
+    skillLevel
+  }
+}

@@ -1953,6 +1953,19 @@ export type GetPlayerQuery = (
   )> }
 );
 
+export type GetPlayersWithUserIdsQueryVariables = Exact<{
+  userIds?: Maybe<Array<Scalars['String']> | Scalars['String']>;
+}>;
+
+
+export type GetPlayersWithUserIdsQuery = (
+  { __typename?: 'Query' }
+  & { players: Array<(
+    { __typename?: 'Player' }
+    & Pick<Player, 'userId'>
+  )> }
+);
+
 
 export const AddPlayerDocument = gql`
     mutation AddPlayer($userId: String, $level: Float, $userTag: String) {
@@ -1992,6 +2005,13 @@ export const GetPlayerDocument = gql`
   }
 }
     `;
+export const GetPlayersWithUserIdsDocument = gql`
+    query GetPlayersWithUserIds($userIds: [String!]) {
+  players(where: {userId: {in: $userIds}}) {
+    userId
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: () => Promise<T>) => Promise<T>;
 
@@ -2011,6 +2031,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     GetPlayer(variables?: GetPlayerQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetPlayerQuery> {
       return withWrapper(() => client.request<GetPlayerQuery>(GetPlayerDocument, variables, requestHeaders));
+    },
+    GetPlayersWithUserIds(variables?: GetPlayersWithUserIdsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetPlayersWithUserIdsQuery> {
+      return withWrapper(() => client.request<GetPlayersWithUserIdsQuery>(GetPlayersWithUserIdsDocument, variables, requestHeaders));
     }
   };
 }

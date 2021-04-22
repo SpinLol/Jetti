@@ -13,6 +13,9 @@ export default class Player extends Model {
   @Column
   userTag: string;
 
+  @Column({ defaultValue: 'ASCENT' })
+  favMap: string;
+
   @HasMany(() => PlayerH)
   history: PlayerH[];
 }

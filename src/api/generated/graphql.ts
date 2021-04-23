@@ -1952,7 +1952,7 @@ export type RemovePlayerMutation = (
   { __typename?: 'Mutation' }
   & { removedPlayer?: Maybe<(
     { __typename?: 'Player' }
-    & Pick<Player, 'id' | 'userTag'>
+    & Pick<Player, 'id' | 'userTag' | 'skillLevel' | 'favoriteMap' | 'imageUrl'>
   )> }
 );
 
@@ -2036,6 +2036,9 @@ export const RemovePlayerDocument = gql`
   removedPlayer: deletePlayer(where: {userId: $userId}) {
     id
     userTag
+    skillLevel
+    favoriteMap
+    imageUrl
   }
 }
     `;

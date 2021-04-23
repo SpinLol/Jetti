@@ -36,7 +36,7 @@ export default class GetPlayerCommand extends Command {
       const { player } = await sdk.GetPlayer({ userId: user.id });
 
       if (player == null) {
-        return message.say(`Player \`${user.tag}\` is not in database!`);
+        return message.reply(`Player \`${user.tag}\` is not in database!`);
       }
 
       return message.say(

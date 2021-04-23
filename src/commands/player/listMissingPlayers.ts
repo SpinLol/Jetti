@@ -1,7 +1,9 @@
-import { Collection, GuildMember } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { apiClient } from '../../api/client';
 import { getSdk } from '../../api/generated/graphql';
+import { colors } from '../../constants';
+import { ErrorEmbed } from '../../core/customEmbeds';
 
 export default class ListMissingPlayersCommand extends Command {
   constructor(client: CommandoClient) {
@@ -31,27 +33,20 @@ export default class ListMissingPlayersCommand extends Command {
       });
 
       if (missingUsers.size === 0) {
-        return message.say('All Players are in the database! None is missing.');
+        return message.reply('All Players are in the database, nobody is missing :)');
       }
 
-      return message.say(printAllUsers(missingUsers));
+      return message.say(
+        new MessageEmbed({
+          color: colors.primary,
+          title: 'Missing Players',
+          description: missingUsers.map((guildMember) => `- ${guildMember.user.tag}`).join('\n'),
+          timestamp: Date.now(),
+        }),
+      );
     } catch (err) {
       console.error(err);
-      return message.say(`Error happened while trying \`${message.content}\``);
+      return message.say(ErrorEmbed(err.message));
     }
   }
 }
-
-const printAllUsers = (users: Collection<string, GuildMember>): string[] => {
-  const result = ['```'];
-
-  result.push('All Missing Players');
-  result.push('');
-
-  users.forEach((user) => {
-    result.push(`\t ${user.user.tag}`);
-  });
-
-  result.push('```');
-  return result;
-};

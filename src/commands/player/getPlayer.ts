@@ -1,7 +1,9 @@
-import { User } from 'discord.js';
+import { MessageEmbed, User } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { apiClient } from '../../api/client';
 import { getSdk } from '../../api/generated/graphql';
+import { colors } from '../../constants';
+import { ErrorEmbed } from '../../core/customEmbeds';
 
 interface PromptArgs {
   user: User;
@@ -36,10 +38,18 @@ export default class GetPlayerCommand extends Command {
         return message.say(`Player \`${user.tag}\` is not in database!`);
       }
 
-      return message.say(`Player \`${user.tag}\` has the skill level ${player.skillLevel}`);
+      return message.say(
+        new MessageEmbed({
+          color: colors.primary,
+          fields: [{ name: 'Skill Level', value: `${player.skillLevel}`, inline: true }],
+          title: player.userTag,
+          timestamp: Date.now(),
+          footer: { text: user.id },
+        }),
+      );
     } catch (err) {
       console.error(err);
-      return message.say(`Error happened while trying \`${message.content}\``);
+      return message.say(ErrorEmbed(err.message));
     }
   }
 }

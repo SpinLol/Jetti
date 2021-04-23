@@ -1913,6 +1913,19 @@ export type AddPlayerMutation = (
   ) }
 );
 
+export type CreateTeamWithPlayersMutationVariables = Exact<{
+  data: TeamCreateInput;
+}>;
+
+
+export type CreateTeamWithPlayersMutation = (
+  { __typename?: 'Mutation' }
+  & { team: (
+    { __typename?: 'Team' }
+    & Pick<Team, 'id' | 'teamName'>
+  ) }
+);
+
 export type RemovePlayerMutationVariables = Exact<{
   userId?: Maybe<Scalars['String']>;
 }>;
@@ -1953,6 +1966,19 @@ export type GetPlayerQuery = (
   )> }
 );
 
+export type GetPlayersQueryVariables = Exact<{
+  userIds?: Maybe<Array<Scalars['String']> | Scalars['String']>;
+}>;
+
+
+export type GetPlayersQuery = (
+  { __typename?: 'Query' }
+  & { players: Array<(
+    { __typename?: 'Player' }
+    & Pick<Player, 'id' | 'userId' | 'userTag' | 'skillLevel'>
+  )> }
+);
+
 export type GetPlayersWithUserIdsQueryVariables = Exact<{
   userIds?: Maybe<Array<Scalars['String']> | Scalars['String']>;
 }>;
@@ -1975,6 +2001,14 @@ export const AddPlayerDocument = gql`
     id
     userTag
     skillLevel
+  }
+}
+    `;
+export const CreateTeamWithPlayersDocument = gql`
+    mutation CreateTeamWithPlayers($data: TeamCreateInput!) {
+  team: createTeam(data: $data) {
+    id
+    teamName
   }
 }
     `;
@@ -2005,6 +2039,16 @@ export const GetPlayerDocument = gql`
   }
 }
     `;
+export const GetPlayersDocument = gql`
+    query GetPlayers($userIds: [String!]) {
+  players(where: {userId: {in: $userIds}}) {
+    id
+    userId
+    userTag
+    skillLevel
+  }
+}
+    `;
 export const GetPlayersWithUserIdsDocument = gql`
     query GetPlayersWithUserIds($userIds: [String!]) {
   players(where: {userId: {in: $userIds}}) {
@@ -2023,6 +2067,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     AddPlayer(variables?: AddPlayerMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<AddPlayerMutation> {
       return withWrapper(() => client.request<AddPlayerMutation>(AddPlayerDocument, variables, requestHeaders));
     },
+    CreateTeamWithPlayers(variables: CreateTeamWithPlayersMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateTeamWithPlayersMutation> {
+      return withWrapper(() => client.request<CreateTeamWithPlayersMutation>(CreateTeamWithPlayersDocument, variables, requestHeaders));
+    },
     RemovePlayer(variables?: RemovePlayerMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RemovePlayerMutation> {
       return withWrapper(() => client.request<RemovePlayerMutation>(RemovePlayerDocument, variables, requestHeaders));
     },
@@ -2031,6 +2078,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     GetPlayer(variables?: GetPlayerQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetPlayerQuery> {
       return withWrapper(() => client.request<GetPlayerQuery>(GetPlayerDocument, variables, requestHeaders));
+    },
+    GetPlayers(variables?: GetPlayersQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetPlayersQuery> {
+      return withWrapper(() => client.request<GetPlayersQuery>(GetPlayersDocument, variables, requestHeaders));
     },
     GetPlayersWithUserIds(variables?: GetPlayersWithUserIdsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetPlayersWithUserIdsQuery> {
       return withWrapper(() => client.request<GetPlayersWithUserIdsQuery>(GetPlayersWithUserIdsDocument, variables, requestHeaders));

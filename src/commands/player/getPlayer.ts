@@ -4,6 +4,7 @@ import { apiClient } from '../../api/client';
 import { getSdk } from '../../api/generated/graphql';
 import { colors } from '../../constants';
 import { ErrorEmbed } from '../../core/customEmbeds';
+import { printLevelName } from '../../core/print';
 
 interface PromptArgs {
   user: User;
@@ -41,7 +42,15 @@ export default class GetPlayerCommand extends Command {
       return message.say(
         new MessageEmbed({
           color: colors.primary,
-          fields: [{ name: 'Skill Level', value: `${player.skillLevel}`, inline: true }],
+          fields: [
+            {
+              name: 'Skill Level',
+              value: `${printLevelName(player.skillLevel)} (${player.skillLevel})`,
+              inline: true,
+            },
+            { name: 'Favorite Map', value: player.favoriteMap, inline: true },
+          ],
+          image: { url: player.imageUrl },
           title: player.userTag,
           timestamp: Date.now(),
           footer: { text: user.id },

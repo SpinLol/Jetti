@@ -1,7 +1,10 @@
-import { User } from 'discord.js';
+import { MessageEmbed, User } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { apiClient } from '../../api/client';
 import { getSdk } from '../../api/generated/graphql';
+import { colors } from '../../constants';
+import { ErrorEmbed } from '../../core/customEmbeds';
+import { printLevelName } from '../../core/print';
 
 interface PromptArgs {
   user: User;
@@ -40,17 +43,37 @@ export default class AddPlayerCommand extends Command {
       const { player } = await sdk.GetPlayer({ userId: user.id });
 
       if (player != null) {
-        return message.say(`Player \`${user.tag}\` was already added!`);
+        return message.reply(`Player \`${user.tag}\` was already added!`);
       }
 
-      const { newPlayer } = await sdk.AddPlayer({ userId: user.id, level: level, userTag: user.tag });
+      const { newPlayer } = await sdk.AddPlayer({
+        userId: user.id,
+        level: level,
+        userTag: user.tag,
+        imageUrl: user.avatarURL({ size: 2048 }),
+      });
 
       return message.say(
-        `Player \`${newPlayer.userTag}\` has the skill level ${newPlayer.skillLevel} and was added successfully!`,
+        new MessageEmbed({
+          color: colors.success,
+          title: newPlayer.userTag,
+          description: 'Player was successfully added!',
+          fields: [
+            {
+              name: 'Skill Level',
+              value: `${printLevelName(newPlayer.skillLevel)} (${newPlayer.skillLevel})`,
+              inline: true,
+            },
+            { name: 'Favorite Map', value: newPlayer.favoriteMap, inline: true },
+          ],
+          image: { url: newPlayer.imageUrl },
+          timestamp: Date.now(),
+          footer: { text: user.id },
+        }),
       );
     } catch (err) {
       console.error(err);
-      return message.say(`Error happened while trying \`${message.content}\``);
+      return message.say(ErrorEmbed(err.message));
     }
   }
 }

@@ -17,4 +17,5 @@ export const userGlup3 = '215409398883811329';
 export const colors = {
   primary: '#59359a',
   danger: '#dc3545',
+  success: '#28a745',
 };

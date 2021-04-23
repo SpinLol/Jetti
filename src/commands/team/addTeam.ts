@@ -4,6 +4,7 @@ import { apiClient } from '../../api/client';
 import { getSdk } from '../../api/generated/graphql';
 import { printLevelName } from '../../core/print';
 import { colors } from '../../constants';
+import { ErrorEmbed } from '../../core/customEmbeds';
 
 interface PromptArgs {
   teamName: string;
@@ -130,7 +131,7 @@ export default class AddTeamCommand extends Command {
       );
     } catch (err) {
       console.error(err);
-      return message.say(`Error happened while trying \`${message.content}\``);
+      return message.say(ErrorEmbed(err.message));
     }
   }
 }

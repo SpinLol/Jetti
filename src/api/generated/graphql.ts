@@ -1956,13 +1956,27 @@ export type RemovePlayerMutation = (
   )> }
 );
 
-export type UpdatePlayerMutationVariables = Exact<{
+export type UpdatePlayerMapMutationVariables = Exact<{
+  userId: Scalars['String'];
+  map: Map;
+}>;
+
+
+export type UpdatePlayerMapMutation = (
+  { __typename?: 'Mutation' }
+  & { updatedPlayer?: Maybe<(
+    { __typename?: 'Player' }
+    & Pick<Player, 'id' | 'favoriteMap'>
+  )> }
+);
+
+export type UpdatePlayerSkillMutationVariables = Exact<{
   userId?: Maybe<Scalars['String']>;
   level?: Maybe<Scalars['Float']>;
 }>;
 
 
-export type UpdatePlayerMutation = (
+export type UpdatePlayerSkillMutation = (
   { __typename?: 'Mutation' }
   & { updatedPlayer?: Maybe<(
     { __typename?: 'Player' }
@@ -2042,8 +2056,19 @@ export const RemovePlayerDocument = gql`
   }
 }
     `;
-export const UpdatePlayerDocument = gql`
-    mutation UpdatePlayer($userId: String, $level: Float) {
+export const UpdatePlayerMapDocument = gql`
+    mutation UpdatePlayerMap($userId: String!, $map: Map!) {
+  updatedPlayer: updatePlayer(
+    where: {userId: $userId}
+    data: {favoriteMap: {set: $map}}
+  ) {
+    id
+    favoriteMap
+  }
+}
+    `;
+export const UpdatePlayerSkillDocument = gql`
+    mutation UpdatePlayerSkill($userId: String, $level: Float) {
   updatedPlayer: updatePlayer(
     where: {userId: $userId}
     data: {skillLevel: {set: $level}}
@@ -2097,8 +2122,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     RemovePlayer(variables: RemovePlayerMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RemovePlayerMutation> {
       return withWrapper(() => client.request<RemovePlayerMutation>(RemovePlayerDocument, variables, requestHeaders));
     },
-    UpdatePlayer(variables?: UpdatePlayerMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdatePlayerMutation> {
-      return withWrapper(() => client.request<UpdatePlayerMutation>(UpdatePlayerDocument, variables, requestHeaders));
+    UpdatePlayerMap(variables: UpdatePlayerMapMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdatePlayerMapMutation> {
+      return withWrapper(() => client.request<UpdatePlayerMapMutation>(UpdatePlayerMapDocument, variables, requestHeaders));
+    },
+    UpdatePlayerSkill(variables?: UpdatePlayerSkillMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdatePlayerSkillMutation> {
+      return withWrapper(() => client.request<UpdatePlayerSkillMutation>(UpdatePlayerSkillDocument, variables, requestHeaders));
     },
     GetPlayer(variables?: GetPlayerQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetPlayerQuery> {
       return withWrapper(() => client.request<GetPlayerQuery>(GetPlayerDocument, variables, requestHeaders));

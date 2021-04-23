@@ -1,21 +1,24 @@
-import { User } from 'discord.js';
+import { MessageEmbed, User } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { apiClient } from '../../api/client';
 import { getSdk } from '../../api/generated/graphql';
+import { colors } from '../../constants';
+import { ErrorEmbed } from '../../core/customEmbeds';
+import { printLevelName } from '../../core/print';
 
 interface PromptArgs {
   user: User;
   level: number;
 }
 
-export default class UpdatePlayerCommand extends Command {
+export default class UpdatePlayerSkillCommand extends Command {
   constructor(client: CommandoClient) {
     super(client, {
-      name: 'update-player',
-      aliases: ['up'],
+      name: 'update-player-skill',
+      aliases: ['ups'],
       group: 'player',
-      memberName: 'update-player',
-      description: 'Updates the level of a Player',
+      memberName: 'update-player-skill',
+      description: 'Updates the skill level of a Player',
       argsCount: 2,
       args: [
         {
@@ -35,21 +38,28 @@ export default class UpdatePlayerCommand extends Command {
 
   async run(message: CommandoMessage, { user, level }: PromptArgs) {
     const sdk = getSdk(apiClient);
+
     try {
       const { player } = await sdk.GetPlayer({ userId: user.id });
 
       if (player == null) {
-        return message.say(`Player \`${user.tag}\` is not in database!`);
+        return message.reply(`Player \`${user.tag}\` is not in database!`);
       }
 
-      const { updatedPlayer } = await sdk.UpdatePlayer({ userId: user.id, level: level });
+      const { updatedPlayer } = await sdk.UpdatePlayerSkill({ userId: user.id, level: level });
+      const newSkillName = printLevelName(updatedPlayer.skillLevel);
 
       return message.say(
-        `Player \`${user.tag}\`' skill level has been updated from ${player.skillLevel} to ${updatedPlayer.skillLevel}!`,
+        new MessageEmbed({
+          color: colors.success,
+          title: user.tag,
+          description: `Updated skill level from ${printLevelName(player.skillLevel)} to ${newSkillName}`,
+          timestamp: Date.now(),
+        }),
       );
     } catch (err) {
       console.error(err);
-      return message.say(`Error happened while trying \`${message.content}\``);
+      return message.say(ErrorEmbed(err.message));
     }
   }
 }

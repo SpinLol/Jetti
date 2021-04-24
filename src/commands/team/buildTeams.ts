@@ -5,6 +5,7 @@ import { WarningEmbed } from '../../core/customEmbeds';
 import { apiClient } from '../../api/client';
 import { GetPlayersWithUserIdsQuery, getSdk } from '../../api/generated/graphql';
 import { MessageEmbed } from 'discord.js';
+import { playerToString } from '../../core/print';
 
 const randomAliases = ['r', 'rand', 'random'];
 const tries = 10;
@@ -64,7 +65,10 @@ export default class buildTeamsCommand extends Command {
         fields: [
           {
             name: 'Team 1',
-            value: players.splice(0, 5).join('\n'),
+            value: players
+              .splice(0, 5)
+              .map((p) => playerToString(p))
+              .join('\n'),
           },
           {
             name: '\u200b',
@@ -72,7 +76,10 @@ export default class buildTeamsCommand extends Command {
           },
           {
             name: 'Team 2',
-            value: players.splice(-5).join('\n'),
+            value: players
+              .splice(-5)
+              .map((p) => playerToString(p))
+              .join('\n'),
           },
         ],
         timestamp: Date.now(),

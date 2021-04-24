@@ -1,3 +1,4 @@
+import { GetPlayerQuery, GetTeamQuery } from '../api/generated/graphql';
 import { Team } from '../db/models';
 
 export function printTeam(team: Team): string {
@@ -17,6 +18,10 @@ export function printTeam(team: Team): string {
   res += `\n\tLevel ${team.player5.skillLevel}\t${team.player5.userTag}`;
   res += '\n```';
   return res;
+}
+
+export function playerToString(player: GetPlayerQuery['player'] | GetTeamQuery['team']['PlayerH1']): string {
+  return `${player.userTag} (${printLevelName(player.skillLevel)})`;
 }
 
 export function printLevelName(skillLevel: number): string {

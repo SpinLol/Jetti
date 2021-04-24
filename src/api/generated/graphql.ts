@@ -2023,6 +2023,35 @@ export type GetPlayersWithUserIdsQuery = (
   )> }
 );
 
+export type GetTeamQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetTeamQuery = (
+  { __typename?: 'Query' }
+  & { team?: Maybe<(
+    { __typename?: 'Team' }
+    & Pick<Team, 'teamName'>
+    & { PlayerH1?: Maybe<(
+      { __typename?: 'PlayerH' }
+      & Pick<PlayerH, 'userTag' | 'skillLevel'>
+    )>, PlayerH2?: Maybe<(
+      { __typename?: 'PlayerH' }
+      & Pick<PlayerH, 'userTag' | 'skillLevel'>
+    )>, PlayerH3?: Maybe<(
+      { __typename?: 'PlayerH' }
+      & Pick<PlayerH, 'userTag' | 'skillLevel'>
+    )>, PlayerH4?: Maybe<(
+      { __typename?: 'PlayerH' }
+      & Pick<PlayerH, 'userTag' | 'skillLevel'>
+    )>, PlayerH5?: Maybe<(
+      { __typename?: 'PlayerH' }
+      & Pick<PlayerH, 'userTag' | 'skillLevel'>
+    )> }
+  )> }
+);
+
 
 export const AddPlayerDocument = gql`
     mutation AddPlayer($userId: String!, $level: Float!, $userTag: String!, $imageUrl: String!) {
@@ -2107,6 +2136,33 @@ export const GetPlayersWithUserIdsDocument = gql`
   }
 }
     `;
+export const GetTeamDocument = gql`
+    query GetTeam($id: Int!) {
+  team(where: {id: $id}) {
+    teamName
+    PlayerH1 {
+      userTag
+      skillLevel
+    }
+    PlayerH2 {
+      userTag
+      skillLevel
+    }
+    PlayerH3 {
+      userTag
+      skillLevel
+    }
+    PlayerH4 {
+      userTag
+      skillLevel
+    }
+    PlayerH5 {
+      userTag
+      skillLevel
+    }
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: () => Promise<T>) => Promise<T>;
 
@@ -2138,6 +2194,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     GetPlayersWithUserIds(variables?: GetPlayersWithUserIdsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetPlayersWithUserIdsQuery> {
       return withWrapper(() => client.request<GetPlayersWithUserIdsQuery>(GetPlayersWithUserIdsDocument, variables, requestHeaders));
+    },
+    GetTeam(variables: GetTeamQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetTeamQuery> {
+      return withWrapper(() => client.request<GetTeamQuery>(GetTeamDocument, variables, requestHeaders));
     }
   };
 }

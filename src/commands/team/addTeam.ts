@@ -2,7 +2,7 @@ import { User, MessageEmbed } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { apiClient } from '../../api/client';
 import { getSdk } from '../../api/generated/graphql';
-import { printLevelName } from '../../core/print';
+import { playerToString } from '../../core/print';
 import { colors } from '../../constants';
 import { ErrorEmbed } from '../../core/customEmbeds';
 
@@ -116,15 +116,16 @@ export default class AddTeamCommand extends Command {
 
       return message.say(
         new MessageEmbed({
-          color: colors.primary,
+          color: colors.success,
           title: `Team ${team.teamName}`,
           timestamp: Date.now(),
+          description: 'Team was successfully added!',
           fields: [
-            { name: 'Player 1', value: `${players[0].userTag} (${printLevelName(players[0].skillLevel)})` },
-            { name: 'Player 2', value: `${players[1].userTag} (${printLevelName(players[1].skillLevel)})` },
-            { name: 'Player 3', value: `${players[2].userTag} (${printLevelName(players[2].skillLevel)})` },
-            { name: 'Player 4', value: `${players[3].userTag} (${printLevelName(players[3].skillLevel)})` },
-            { name: 'Player 5', value: `${players[4].userTag} (${printLevelName(players[4].skillLevel)})` },
+            { name: 'Player 1', value: playerToString(players[0]) },
+            { name: 'Player 2', value: playerToString(players[1]) },
+            { name: 'Player 3', value: playerToString(players[2]) },
+            { name: 'Player 4', value: playerToString(players[3]) },
+            { name: 'Player 5', value: playerToString(players[4]) },
           ],
           footer: { text: `Team ID: ${team.id}` },
         }),

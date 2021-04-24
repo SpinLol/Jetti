@@ -2019,7 +2019,7 @@ export type GetPlayersWithUserIdsQuery = (
   { __typename?: 'Query' }
   & { players: Array<(
     { __typename?: 'Player' }
-    & Pick<Player, 'userId'>
+    & Pick<Player, 'userId' | 'skillLevel' | 'userTag'>
   )> }
 );
 
@@ -2102,6 +2102,8 @@ export const GetPlayersWithUserIdsDocument = gql`
     query GetPlayersWithUserIds($userIds: [String!]) {
   players(where: {userId: {in: $userIds}}) {
     userId
+    skillLevel
+    userTag
   }
 }
     `;

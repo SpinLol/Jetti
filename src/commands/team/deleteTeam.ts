@@ -1,6 +1,9 @@
+import { MessageEmbed } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-
-import { Team } from '../../db/models';
+import { apiClient } from '../../api/client';
+import { getSdk } from '../../api/generated/graphql';
+import { colors } from '../../constants';
+import { ErrorEmbed, WarningEmbed } from '../../core/customEmbeds';
 
 interface PromptArgs {
   teamId: number;
@@ -10,10 +13,10 @@ export default class DeleteTeamCommand extends Command {
   constructor(client: CommandoClient) {
     super(client, {
       name: 'delete-team',
-      aliases: ['dt', 'remove-team', 'rt'],
+      aliases: ['dt'],
       group: 'team',
       memberName: 'delete-team',
-      description: 'Deletes a team entry in the database',
+      description: 'Deletes a team in the database',
       argsCount: 1,
       args: [
         {
@@ -25,17 +28,30 @@ export default class DeleteTeamCommand extends Command {
     });
   }
 
-  async run(msg: CommandoMessage, { teamId }: PromptArgs) {
-    const teamToDelete = await Team.findOne({
-      where: { id: teamId },
-    });
+  async run(message: CommandoMessage, { teamId }: PromptArgs) {
+    const sdk = getSdk(apiClient);
 
-    if (teamToDelete == null) {
-      return msg.say(`Team with ID \`${teamId}\` is not in the database...`);
+    try {
+      const { team } = await sdk.GetTeam({ id: teamId });
+
+      if (team == null) {
+        return message.say(WarningEmbed(`Team with ID ${teamId} was not found`));
+      }
+
+      const { deletedTeam } = await sdk.DeleteTeam({ id: teamId });
+
+      return message.say(
+        new MessageEmbed({
+          color: colors.danger,
+          title: `Team ${deletedTeam.teamName}`,
+          description: 'Successfully deleted team!',
+          timestamp: Date.now(),
+          footer: { text: `ID ${teamId}` },
+        }),
+      );
+    } catch (err) {
+      console.error(err);
+      return message.say(ErrorEmbed(err.message));
     }
-
-    await teamToDelete.destroy();
-
-    return msg.say(`Team \`${teamId}\` was successfully removed from the database!`);
   }
 }

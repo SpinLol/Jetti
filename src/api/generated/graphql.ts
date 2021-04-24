@@ -1943,6 +1943,19 @@ export type CreateTeamWithPlayersMutation = (
   ) }
 );
 
+export type DeleteTeamMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteTeamMutation = (
+  { __typename?: 'Mutation' }
+  & { deletedTeam?: Maybe<(
+    { __typename?: 'Team' }
+    & Pick<Team, 'teamName'>
+  )> }
+);
+
 export type RemovePlayerMutationVariables = Exact<{
   userId: Scalars['String'];
 }>;
@@ -2074,6 +2087,13 @@ export const CreateTeamWithPlayersDocument = gql`
   }
 }
     `;
+export const DeleteTeamDocument = gql`
+    mutation DeleteTeam($id: Int!) {
+  deletedTeam: deleteTeam(where: {id: $id}) {
+    teamName
+  }
+}
+    `;
 export const RemovePlayerDocument = gql`
     mutation RemovePlayer($userId: String!) {
   removedPlayer: deletePlayer(where: {userId: $userId}) {
@@ -2176,6 +2196,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     CreateTeamWithPlayers(variables: CreateTeamWithPlayersMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateTeamWithPlayersMutation> {
       return withWrapper(() => client.request<CreateTeamWithPlayersMutation>(CreateTeamWithPlayersDocument, variables, requestHeaders));
+    },
+    DeleteTeam(variables: DeleteTeamMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<DeleteTeamMutation> {
+      return withWrapper(() => client.request<DeleteTeamMutation>(DeleteTeamDocument, variables, requestHeaders));
     },
     RemovePlayer(variables: RemovePlayerMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RemovePlayerMutation> {
       return withWrapper(() => client.request<RemovePlayerMutation>(RemovePlayerDocument, variables, requestHeaders));

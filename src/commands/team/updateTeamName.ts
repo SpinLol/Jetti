@@ -34,19 +34,19 @@ export default class UpdateTeamNameCommand extends Command {
     });
   }
 
-  async run(msg: CommandoMessage, { teamId, newTeamName }: PromptArgs) {
+  async run(message: CommandoMessage, { teamId, newTeamName }: PromptArgs) {
     const sdk = getSdk(apiClient);
 
     try {
       const { team } = await sdk.GetTeamName({ id: teamId });
 
       if (team == null) {
-        return msg.say(WarningEmbed(`Team with ID ${teamId} was not found!`));
+        return message.say(WarningEmbed(`Team with ID ${teamId} was not found!`));
       }
 
       const { updatedTeam } = await sdk.UpdateTeamName({ id: teamId, name: newTeamName });
 
-      return msg.say(
+      return message.say(
         new MessageEmbed({
           title: `Team ${updatedTeam.teamName}`,
           description: `Updated team name from ${team.teamName} to ${updatedTeam.teamName}`,
@@ -57,7 +57,7 @@ export default class UpdateTeamNameCommand extends Command {
       );
     } catch (err) {
       console.error(err);
-      return msg.say(ErrorEmbed(err.message));
+      return message.say(ErrorEmbed(err.message));
     }
   }
 }

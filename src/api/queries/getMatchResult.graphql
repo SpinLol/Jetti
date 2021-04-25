@@ -1,0 +1,5 @@
+query GetMatchResult($id: Int!) {
+  match(where: { id: $id }) {
+    matchResult
+  }
+}

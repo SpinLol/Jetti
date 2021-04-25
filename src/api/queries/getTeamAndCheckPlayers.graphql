@@ -1,0 +1,41 @@
+query GetTeamAndCheckPlayers($teamId: Int!, $userId: String!, $newUserId: String!) {
+  team(where: { id: $teamId }) {
+    id
+    teamName
+    PlayerH1 {
+      id
+      userTag
+      skillLevel
+    }
+    PlayerH2 {
+      id
+      userTag
+      skillLevel
+    }
+    PlayerH3 {
+      id
+      userTag
+      skillLevel
+    }
+    PlayerH4 {
+      id
+      userTag
+      skillLevel
+    }
+    PlayerH5 {
+      id
+      userTag
+      skillLevel
+    }
+  }
+
+  player(where: { userId: $userId }) {
+    id
+  }
+
+  newPlayer: player(where: { userId: $newUserId }) {
+    id
+    skillLevel
+    userTag
+  }
+}

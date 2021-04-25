@@ -1,0 +1,10 @@
+mutation SwapPlayerH($id: Int!, $skillLevel: Float!, $userTag: String!, $playerId: Int!) {
+  updatePlayerH(
+    where: { id: $id }
+    data: { skillLevel: { set: $skillLevel }, userTag: { set: $userTag }, Player: { connect: { id: $playerId } } }
+  ) {
+    id
+    playerId
+    userTag
+  }
+}

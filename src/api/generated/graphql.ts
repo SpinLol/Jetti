@@ -404,6 +404,7 @@ export type Mutation = {
   createPlayer: Player;
   deletePlayer?: Maybe<Player>;
   updatePlayer?: Maybe<Player>;
+  updatePlayerH?: Maybe<PlayerH>;
   createTeam: Team;
   deleteTeam?: Maybe<Team>;
   updateTeam?: Maybe<Team>;
@@ -439,6 +440,12 @@ export type MutationDeletePlayerArgs = {
 export type MutationUpdatePlayerArgs = {
   data: PlayerUpdateInput;
   where: PlayerWhereUniqueInput;
+};
+
+
+export type MutationUpdatePlayerHArgs = {
+  data: PlayerHUpdateInput;
+  where: PlayerHWhereUniqueInput;
 };
 
 
@@ -858,6 +865,19 @@ export type PlayerHScalarWhereInput = {
   userTag?: Maybe<StringNullableFilter>;
   createdAt?: Maybe<DateTimeFilter>;
   updatedAt?: Maybe<DateTimeFilter>;
+};
+
+export type PlayerHUpdateInput = {
+  skillLevel?: Maybe<NullableFloatFieldUpdateOperationsInput>;
+  userTag?: Maybe<NullableStringFieldUpdateOperationsInput>;
+  createdAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  updatedAt?: Maybe<DateTimeFieldUpdateOperationsInput>;
+  Player?: Maybe<PlayerUpdateOneWithoutPlayerHInput>;
+  Team1?: Maybe<TeamUpdateManyWithoutPlayerH1Input>;
+  Team2?: Maybe<TeamUpdateManyWithoutPlayerH2Input>;
+  Team3?: Maybe<TeamUpdateManyWithoutPlayerH3Input>;
+  Team4?: Maybe<TeamUpdateManyWithoutPlayerH4Input>;
+  Team5?: Maybe<TeamUpdateManyWithoutPlayerH5Input>;
 };
 
 export type PlayerHUpdateManyMutationInput = {
@@ -1969,6 +1989,22 @@ export type RemovePlayerMutation = (
   )> }
 );
 
+export type SwapPlayerHMutationVariables = Exact<{
+  id: Scalars['Int'];
+  skillLevel: Scalars['Float'];
+  userTag: Scalars['String'];
+  playerId: Scalars['Int'];
+}>;
+
+
+export type SwapPlayerHMutation = (
+  { __typename?: 'Mutation' }
+  & { updatePlayerH?: Maybe<(
+    { __typename?: 'PlayerH' }
+    & Pick<PlayerH, 'id' | 'playerId' | 'userTag'>
+  )> }
+);
+
 export type UpdatePlayerMapMutationVariables = Exact<{
   userId: Scalars['String'];
   map: Map;
@@ -1994,6 +2030,36 @@ export type UpdatePlayerSkillMutation = (
   & { updatedPlayer?: Maybe<(
     { __typename?: 'Player' }
     & Pick<Player, 'id' | 'skillLevel'>
+  )> }
+);
+
+export type UpdateTeamPlayerMutationVariables = Exact<{
+  id: Scalars['Int'];
+  data: TeamUpdateInput;
+}>;
+
+
+export type UpdateTeamPlayerMutation = (
+  { __typename?: 'Mutation' }
+  & { updateTeam?: Maybe<(
+    { __typename?: 'Team' }
+    & Pick<Team, 'teamName'>
+    & { PlayerH1?: Maybe<(
+      { __typename?: 'PlayerH' }
+      & Pick<PlayerH, 'userTag' | 'skillLevel'>
+    )>, PlayerH2?: Maybe<(
+      { __typename?: 'PlayerH' }
+      & Pick<PlayerH, 'userTag' | 'skillLevel'>
+    )>, PlayerH3?: Maybe<(
+      { __typename?: 'PlayerH' }
+      & Pick<PlayerH, 'userTag' | 'skillLevel'>
+    )>, PlayerH4?: Maybe<(
+      { __typename?: 'PlayerH' }
+      & Pick<PlayerH, 'userTag' | 'skillLevel'>
+    )>, PlayerH5?: Maybe<(
+      { __typename?: 'PlayerH' }
+      & Pick<PlayerH, 'userTag' | 'skillLevel'>
+    )> }
   )> }
 );
 
@@ -2065,6 +2131,43 @@ export type GetTeamQuery = (
   )> }
 );
 
+export type GetTeamAndCheckPlayersQueryVariables = Exact<{
+  teamId: Scalars['Int'];
+  userId: Scalars['String'];
+  newUserId: Scalars['String'];
+}>;
+
+
+export type GetTeamAndCheckPlayersQuery = (
+  { __typename?: 'Query' }
+  & { team?: Maybe<(
+    { __typename?: 'Team' }
+    & Pick<Team, 'id' | 'teamName'>
+    & { PlayerH1?: Maybe<(
+      { __typename?: 'PlayerH' }
+      & Pick<PlayerH, 'id' | 'userTag' | 'skillLevel'>
+    )>, PlayerH2?: Maybe<(
+      { __typename?: 'PlayerH' }
+      & Pick<PlayerH, 'id' | 'userTag' | 'skillLevel'>
+    )>, PlayerH3?: Maybe<(
+      { __typename?: 'PlayerH' }
+      & Pick<PlayerH, 'id' | 'userTag' | 'skillLevel'>
+    )>, PlayerH4?: Maybe<(
+      { __typename?: 'PlayerH' }
+      & Pick<PlayerH, 'id' | 'userTag' | 'skillLevel'>
+    )>, PlayerH5?: Maybe<(
+      { __typename?: 'PlayerH' }
+      & Pick<PlayerH, 'id' | 'userTag' | 'skillLevel'>
+    )> }
+  )>, player?: Maybe<(
+    { __typename?: 'Player' }
+    & Pick<Player, 'id'>
+  )>, newPlayer?: Maybe<(
+    { __typename?: 'Player' }
+    & Pick<Player, 'id' | 'skillLevel' | 'userTag'>
+  )> }
+);
+
 
 export const AddPlayerDocument = gql`
     mutation AddPlayer($userId: String!, $level: Float!, $userTag: String!, $imageUrl: String!) {
@@ -2105,6 +2208,18 @@ export const RemovePlayerDocument = gql`
   }
 }
     `;
+export const SwapPlayerHDocument = gql`
+    mutation SwapPlayerH($id: Int!, $skillLevel: Float!, $userTag: String!, $playerId: Int!) {
+  updatePlayerH(
+    where: {id: $id}
+    data: {skillLevel: {set: $skillLevel}, userTag: {set: $userTag}, Player: {connect: {id: $playerId}}}
+  ) {
+    id
+    playerId
+    userTag
+  }
+}
+    `;
 export const UpdatePlayerMapDocument = gql`
     mutation UpdatePlayerMap($userId: String!, $map: Map!) {
   updatedPlayer: updatePlayer(
@@ -2124,6 +2239,33 @@ export const UpdatePlayerSkillDocument = gql`
   ) {
     id
     skillLevel
+  }
+}
+    `;
+export const UpdateTeamPlayerDocument = gql`
+    mutation UpdateTeamPlayer($id: Int!, $data: TeamUpdateInput!) {
+  updateTeam(where: {id: $id}, data: $data) {
+    teamName
+    PlayerH1 {
+      userTag
+      skillLevel
+    }
+    PlayerH2 {
+      userTag
+      skillLevel
+    }
+    PlayerH3 {
+      userTag
+      skillLevel
+    }
+    PlayerH4 {
+      userTag
+      skillLevel
+    }
+    PlayerH5 {
+      userTag
+      skillLevel
+    }
   }
 }
     `;
@@ -2183,6 +2325,47 @@ export const GetTeamDocument = gql`
   }
 }
     `;
+export const GetTeamAndCheckPlayersDocument = gql`
+    query GetTeamAndCheckPlayers($teamId: Int!, $userId: String!, $newUserId: String!) {
+  team(where: {id: $teamId}) {
+    id
+    teamName
+    PlayerH1 {
+      id
+      userTag
+      skillLevel
+    }
+    PlayerH2 {
+      id
+      userTag
+      skillLevel
+    }
+    PlayerH3 {
+      id
+      userTag
+      skillLevel
+    }
+    PlayerH4 {
+      id
+      userTag
+      skillLevel
+    }
+    PlayerH5 {
+      id
+      userTag
+      skillLevel
+    }
+  }
+  player(where: {userId: $userId}) {
+    id
+  }
+  newPlayer: player(where: {userId: $newUserId}) {
+    id
+    skillLevel
+    userTag
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: () => Promise<T>) => Promise<T>;
 
@@ -2203,11 +2386,17 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     RemovePlayer(variables: RemovePlayerMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RemovePlayerMutation> {
       return withWrapper(() => client.request<RemovePlayerMutation>(RemovePlayerDocument, variables, requestHeaders));
     },
+    SwapPlayerH(variables: SwapPlayerHMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SwapPlayerHMutation> {
+      return withWrapper(() => client.request<SwapPlayerHMutation>(SwapPlayerHDocument, variables, requestHeaders));
+    },
     UpdatePlayerMap(variables: UpdatePlayerMapMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdatePlayerMapMutation> {
       return withWrapper(() => client.request<UpdatePlayerMapMutation>(UpdatePlayerMapDocument, variables, requestHeaders));
     },
     UpdatePlayerSkill(variables?: UpdatePlayerSkillMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdatePlayerSkillMutation> {
       return withWrapper(() => client.request<UpdatePlayerSkillMutation>(UpdatePlayerSkillDocument, variables, requestHeaders));
+    },
+    UpdateTeamPlayer(variables: UpdateTeamPlayerMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateTeamPlayerMutation> {
+      return withWrapper(() => client.request<UpdateTeamPlayerMutation>(UpdateTeamPlayerDocument, variables, requestHeaders));
     },
     GetPlayer(variables?: GetPlayerQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetPlayerQuery> {
       return withWrapper(() => client.request<GetPlayerQuery>(GetPlayerDocument, variables, requestHeaders));
@@ -2220,6 +2409,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     GetTeam(variables: GetTeamQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetTeamQuery> {
       return withWrapper(() => client.request<GetTeamQuery>(GetTeamDocument, variables, requestHeaders));
+    },
+    GetTeamAndCheckPlayers(variables: GetTeamAndCheckPlayersQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetTeamAndCheckPlayersQuery> {
+      return withWrapper(() => client.request<GetTeamAndCheckPlayersQuery>(GetTeamAndCheckPlayersDocument, variables, requestHeaders));
     }
   };
 }

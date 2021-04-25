@@ -13,7 +13,7 @@ export default class UpdateMatchScreenshot extends Command {
   constructor(client: CommandoClient) {
     super(client, {
       name: 'update-match-screenshot',
-      aliases: ['ums'],
+      aliases: ['ums', 'screenshot'],
       group: 'match',
       memberName: 'update-match-screenshot',
       description: 'Updates the screenshot of a Match',

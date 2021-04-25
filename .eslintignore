@@ -1,5 +1,3 @@
 node_modules
 dist
-migrations/**/*.js
-models/**/*.js
-config/**/*.js
+src/api/generated/

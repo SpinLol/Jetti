@@ -1,0 +1,5 @@
+mutation UpdateMatchScreenshot($id: Int!, $screenshot: String!) {
+  updatedMatch: updateMatch(where: { id: $id }, data: { screenshotPath: { set: $screenshot } }) {
+    screenshotPath
+  }
+}

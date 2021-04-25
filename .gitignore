@@ -1,11 +1,6 @@
 /node_modules
 
-src/config/config.json
-
-.vscode
 
 dist/
 
 .env
-
-src/db/db.sqlite

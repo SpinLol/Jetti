@@ -1,0 +1,25 @@
+mutation UpdateTeamPlayer($id: Int!, $data: TeamUpdateInput!) {
+  updateTeam(where: { id: $id }, data: $data) {
+    teamName
+    PlayerH1 {
+      userTag
+      skillLevel
+    }
+    PlayerH2 {
+      userTag
+      skillLevel
+    }
+    PlayerH3 {
+      userTag
+      skillLevel
+    }
+    PlayerH4 {
+      userTag
+      skillLevel
+    }
+    PlayerH5 {
+      userTag
+      skillLevel
+    }
+  }
+}

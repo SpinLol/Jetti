@@ -1,0 +1,9 @@
+mutation RemovePlayer($userId: String!) {
+  removedPlayer: deletePlayer(where: { userId: $userId }) {
+    id
+    userTag
+    skillLevel
+    favoriteMap
+    imageUrl
+  }
+}

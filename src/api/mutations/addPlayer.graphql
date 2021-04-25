@@ -1,0 +1,9 @@
+mutation AddPlayer($userId: String!, $level: Float!, $userTag: String!, $imageUrl: String!) {
+  newPlayer: createPlayer(data: { userId: $userId, skillLevel: $level, userTag: $userTag, imageUrl: $imageUrl }) {
+    id
+    userTag
+    skillLevel
+    favoriteMap
+    imageUrl
+  }
+}

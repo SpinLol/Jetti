@@ -9,7 +9,7 @@ export const botStatus: ActivityOptions[] = [
   { name: 'you ❤', type: 'WATCHING' },
   { name: 'your footsteps ❤', type: 'LISTENING' },
   { name: 'with knifes ❤', type: 'PLAYING' },
-  { name: 'https://jetti-ui.herokuapp.com/', type: 'WATCHING' },
+  { name: 'https://jetti-news.vercel.app/', type: 'WATCHING' },
 ];
 export const userAndi = '265526209662812161';
 export const userGlup3 = '215409398883811329';

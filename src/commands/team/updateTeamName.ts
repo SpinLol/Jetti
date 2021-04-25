@@ -1,20 +1,23 @@
+import { MessageEmbed } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-
-import { Team } from '../../db/models';
+import { apiClient } from '../../api/client';
+import { getSdk } from '../../api/generated/graphql';
+import { colors } from '../../constants';
+import { ErrorEmbed, WarningEmbed } from '../../core/customEmbeds';
 
 interface PromptArgs {
   teamId: number;
   newTeamName: string;
 }
 
-export default class UpdateTeamCommand extends Command {
+export default class UpdateTeamNameCommand extends Command {
   constructor(client: CommandoClient) {
     super(client, {
       name: 'update-team-name',
       aliases: ['utn'],
       group: 'team',
       memberName: 'update-team-name',
-      description: 'Changes the team-name of a team entry in the database',
+      description: 'Updates the team name',
       argsCount: 2,
       args: [
         {
@@ -32,17 +35,29 @@ export default class UpdateTeamCommand extends Command {
   }
 
   async run(msg: CommandoMessage, { teamId, newTeamName }: PromptArgs) {
-    const teamToEdit = await Team.findOne({
-      where: { id: teamId },
-    });
+    const sdk = getSdk(apiClient);
 
-    if (teamToEdit == null) {
-      return msg.say(`Team with ID \`${teamId}\` is not in the database...`);
+    try {
+      const { team } = await sdk.GetTeamName({ id: teamId });
+
+      if (team == null) {
+        return msg.say(WarningEmbed(`Team with ID ${teamId} was not found!`));
+      }
+
+      const { updatedTeam } = await sdk.UpdateTeamName({ id: teamId, name: newTeamName });
+
+      return msg.say(
+        new MessageEmbed({
+          title: `Team ${updatedTeam.teamName}`,
+          description: `Updated team name from ${team.teamName} to ${updatedTeam.teamName}`,
+          color: colors.success,
+          timestamp: Date.now(),
+          footer: { text: `ID ${updatedTeam.id}` },
+        }),
+      );
+    } catch (err) {
+      console.error(err);
+      return msg.say(ErrorEmbed(err.message));
     }
-
-    teamToEdit.teamName = newTeamName;
-    teamToEdit.save();
-
-    return msg.say(`Team \`${teamId}\` was renamed to \`${teamToEdit.teamName}\``);
   }
 }

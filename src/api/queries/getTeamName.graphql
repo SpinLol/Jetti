@@ -1,0 +1,5 @@
+query GetTeamName($id: Int!) {
+  team(where: { id: $id }) {
+    teamName
+  }
+}

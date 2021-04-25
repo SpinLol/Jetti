@@ -42,13 +42,13 @@ export default class buildTeamsCommand extends Command {
     }
 
     const sdk = getSdk(apiClient);
-    const { players } = await sdk.GetPlayersWithUserIds({ userIds: channel.members.map((_, k) => k) });
+    const { players } = await sdk.GetPlayersWithUserIds({ userIds: userIds });
 
-    const missingUsers = channel.members.filter((_, userId) => {
+    const missingUsers = userIds.filter((userId) => {
       return players.find((player) => player.userId === userId) == undefined;
     });
 
-    if (missingUsers.size > 0) {
+    if (missingUsers.length > 0) {
       return message.say(WarningEmbed(`Some players are missing in the database! Try ${this.client.commandPrefix}lmp`));
     }
 

@@ -1,6 +1,9 @@
+import { MessageEmbed } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-
-import { Match } from '../../db/models';
+import { apiClient } from '../../api/client';
+import { getSdk } from '../../api/generated/graphql';
+import { colors } from '../../constants';
+import { ErrorEmbed, WarningEmbed } from '../../core/customEmbeds';
 
 interface PromptArgs {
   matchId: number;
@@ -10,10 +13,10 @@ export default class DeleteMatchCommand extends Command {
   constructor(client: CommandoClient) {
     super(client, {
       name: 'delete-match',
-      aliases: ['dm', 'remove-match', 'rm'],
+      aliases: ['dm'],
       group: 'match',
       memberName: 'delete-match',
-      description: 'Deletes a match entry in the database',
+      description: 'Deletes a match in the database',
       argsCount: 1,
       args: [
         {
@@ -25,15 +28,29 @@ export default class DeleteMatchCommand extends Command {
     });
   }
 
-  async run(msg: CommandoMessage, { matchId }: PromptArgs) {
-    const match = await Match.findOne({ where: { id: matchId } });
+  async run(message: CommandoMessage, { matchId }: PromptArgs) {
+    const sdk = getSdk(apiClient);
 
-    if (match == null) {
-      return msg.say(`Match with ID \`${matchId}\` is not in the database...`);
+    try {
+      const { match } = await sdk.findMatch({ id: matchId });
+
+      if (match == null) {
+        return message.say(WarningEmbed(`Match with ID ${matchId} was not found!`));
+      }
+
+      const { deletedMatch } = await sdk.DeleteMatch({ id: matchId });
+
+      return message.say(
+        new MessageEmbed({
+          color: colors.danger,
+          description: 'Successfully deleted Match!',
+          timestamp: Date.now(),
+          footer: { text: `ID ${deletedMatch.id}` },
+        }),
+      );
+    } catch (err) {
+      console.error(err);
+      return message.say(ErrorEmbed(err.message));
     }
-
-    await match.destroy();
-
-    return msg.say(`Match \`${matchId}\` was successfully removed from the database!`);
   }
 }

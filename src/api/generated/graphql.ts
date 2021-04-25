@@ -2016,6 +2016,19 @@ export type CreateTeamWithPlayersMutation = (
   ) }
 );
 
+export type DeleteMatchMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteMatchMutation = (
+  { __typename?: 'Mutation' }
+  & { deletedMatch?: Maybe<(
+    { __typename?: 'Match' }
+    & Pick<Match, 'id'>
+  )> }
+);
+
 export type DeleteTeamMutationVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -2026,58 +2039,6 @@ export type DeleteTeamMutation = (
   & { deletedTeam?: Maybe<(
     { __typename?: 'Team' }
     & Pick<Team, 'teamName'>
-  )> }
-);
-
-export type GetMatchQueryVariables = Exact<{
-  id: Scalars['Int'];
-}>;
-
-
-export type GetMatchQuery = (
-  { __typename?: 'Query' }
-  & { match?: Maybe<(
-    { __typename?: 'Match' }
-    & Pick<Match, 'matchResult' | 'screenshotPath' | 'map' | 'updatedAt'>
-    & { Team1?: Maybe<(
-      { __typename?: 'Team' }
-      & Pick<Team, 'teamName'>
-      & { PlayerH1?: Maybe<(
-        { __typename?: 'PlayerH' }
-        & Pick<PlayerH, 'userTag' | 'skillLevel'>
-      )>, PlayerH2?: Maybe<(
-        { __typename?: 'PlayerH' }
-        & Pick<PlayerH, 'userTag' | 'skillLevel'>
-      )>, PlayerH3?: Maybe<(
-        { __typename?: 'PlayerH' }
-        & Pick<PlayerH, 'userTag' | 'skillLevel'>
-      )>, PlayerH4?: Maybe<(
-        { __typename?: 'PlayerH' }
-        & Pick<PlayerH, 'userTag' | 'skillLevel'>
-      )>, PlayerH5?: Maybe<(
-        { __typename?: 'PlayerH' }
-        & Pick<PlayerH, 'userTag' | 'skillLevel'>
-      )> }
-    )>, Team2?: Maybe<(
-      { __typename?: 'Team' }
-      & Pick<Team, 'teamName'>
-      & { PlayerH1?: Maybe<(
-        { __typename?: 'PlayerH' }
-        & Pick<PlayerH, 'userTag' | 'skillLevel'>
-      )>, PlayerH2?: Maybe<(
-        { __typename?: 'PlayerH' }
-        & Pick<PlayerH, 'userTag' | 'skillLevel'>
-      )>, PlayerH3?: Maybe<(
-        { __typename?: 'PlayerH' }
-        & Pick<PlayerH, 'userTag' | 'skillLevel'>
-      )>, PlayerH4?: Maybe<(
-        { __typename?: 'PlayerH' }
-        & Pick<PlayerH, 'userTag' | 'skillLevel'>
-      )>, PlayerH5?: Maybe<(
-        { __typename?: 'PlayerH' }
-        & Pick<PlayerH, 'userTag' | 'skillLevel'>
-      )> }
-    )> }
   )> }
 );
 
@@ -2178,6 +2139,84 @@ export type UpdateTeamPlayerMutation = (
     )>, PlayerH5?: Maybe<(
       { __typename?: 'PlayerH' }
       & Pick<PlayerH, 'userTag' | 'skillLevel'>
+    )> }
+  )> }
+);
+
+export type FindMatchQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type FindMatchQuery = (
+  { __typename?: 'Query' }
+  & { match?: Maybe<(
+    { __typename?: 'Match' }
+    & Pick<Match, 'id'>
+  )> }
+);
+
+export type FindTeamQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type FindTeamQuery = (
+  { __typename?: 'Query' }
+  & { team?: Maybe<(
+    { __typename?: 'Team' }
+    & Pick<Team, 'id'>
+  )> }
+);
+
+export type GetMatchQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetMatchQuery = (
+  { __typename?: 'Query' }
+  & { match?: Maybe<(
+    { __typename?: 'Match' }
+    & Pick<Match, 'matchResult' | 'screenshotPath' | 'map' | 'updatedAt'>
+    & { Team1?: Maybe<(
+      { __typename?: 'Team' }
+      & Pick<Team, 'teamName'>
+      & { PlayerH1?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH2?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH3?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH4?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH5?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )> }
+    )>, Team2?: Maybe<(
+      { __typename?: 'Team' }
+      & Pick<Team, 'teamName'>
+      & { PlayerH1?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH2?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH3?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH4?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH5?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )> }
     )> }
   )> }
 );
@@ -2399,74 +2438,17 @@ export const CreateTeamWithPlayersDocument = gql`
   }
 }
     `;
+export const DeleteMatchDocument = gql`
+    mutation DeleteMatch($id: Int!) {
+  deletedMatch: deleteMatch(where: {id: $id}) {
+    id
+  }
+}
+    `;
 export const DeleteTeamDocument = gql`
     mutation DeleteTeam($id: Int!) {
   deletedTeam: deleteTeam(where: {id: $id}) {
     teamName
-  }
-}
-    `;
-export const GetMatchDocument = gql`
-    query GetMatch($id: Int!) {
-  match(where: {id: $id}) {
-    matchResult
-    screenshotPath
-    map
-    updatedAt
-    Team1 {
-      teamName
-      PlayerH1 {
-        userTag
-        skillLevel
-      }
-      PlayerH1 {
-        userTag
-        skillLevel
-      }
-      PlayerH2 {
-        userTag
-        skillLevel
-      }
-      PlayerH3 {
-        userTag
-        skillLevel
-      }
-      PlayerH4 {
-        userTag
-        skillLevel
-      }
-      PlayerH5 {
-        userTag
-        skillLevel
-      }
-    }
-    Team2 {
-      teamName
-      PlayerH1 {
-        userTag
-        skillLevel
-      }
-      PlayerH1 {
-        userTag
-        skillLevel
-      }
-      PlayerH2 {
-        userTag
-        skillLevel
-      }
-      PlayerH3 {
-        userTag
-        skillLevel
-      }
-      PlayerH4 {
-        userTag
-        skillLevel
-      }
-      PlayerH5 {
-        userTag
-        skillLevel
-      }
-    }
   }
 }
     `;
@@ -2546,6 +2528,84 @@ export const UpdateTeamPlayerDocument = gql`
     PlayerH5 {
       userTag
       skillLevel
+    }
+  }
+}
+    `;
+export const FindMatchDocument = gql`
+    query findMatch($id: Int!) {
+  match(where: {id: $id}) {
+    id
+  }
+}
+    `;
+export const FindTeamDocument = gql`
+    query findTeam($id: Int!) {
+  team(where: {id: $id}) {
+    id
+  }
+}
+    `;
+export const GetMatchDocument = gql`
+    query GetMatch($id: Int!) {
+  match(where: {id: $id}) {
+    matchResult
+    screenshotPath
+    map
+    updatedAt
+    Team1 {
+      teamName
+      PlayerH1 {
+        userTag
+        skillLevel
+      }
+      PlayerH1 {
+        userTag
+        skillLevel
+      }
+      PlayerH2 {
+        userTag
+        skillLevel
+      }
+      PlayerH3 {
+        userTag
+        skillLevel
+      }
+      PlayerH4 {
+        userTag
+        skillLevel
+      }
+      PlayerH5 {
+        userTag
+        skillLevel
+      }
+    }
+    Team2 {
+      teamName
+      PlayerH1 {
+        userTag
+        skillLevel
+      }
+      PlayerH1 {
+        userTag
+        skillLevel
+      }
+      PlayerH2 {
+        userTag
+        skillLevel
+      }
+      PlayerH3 {
+        userTag
+        skillLevel
+      }
+      PlayerH4 {
+        userTag
+        skillLevel
+      }
+      PlayerH5 {
+        userTag
+        skillLevel
+      }
     }
   }
 }
@@ -2678,11 +2738,11 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     CreateTeamWithPlayers(variables: CreateTeamWithPlayersMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<CreateTeamWithPlayersMutation> {
       return withWrapper(() => client.request<CreateTeamWithPlayersMutation>(CreateTeamWithPlayersDocument, variables, requestHeaders));
     },
+    DeleteMatch(variables: DeleteMatchMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<DeleteMatchMutation> {
+      return withWrapper(() => client.request<DeleteMatchMutation>(DeleteMatchDocument, variables, requestHeaders));
+    },
     DeleteTeam(variables: DeleteTeamMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<DeleteTeamMutation> {
       return withWrapper(() => client.request<DeleteTeamMutation>(DeleteTeamDocument, variables, requestHeaders));
-    },
-    GetMatch(variables: GetMatchQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetMatchQuery> {
-      return withWrapper(() => client.request<GetMatchQuery>(GetMatchDocument, variables, requestHeaders));
     },
     RemovePlayer(variables: RemovePlayerMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RemovePlayerMutation> {
       return withWrapper(() => client.request<RemovePlayerMutation>(RemovePlayerDocument, variables, requestHeaders));
@@ -2701,6 +2761,15 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     UpdateTeamPlayer(variables: UpdateTeamPlayerMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateTeamPlayerMutation> {
       return withWrapper(() => client.request<UpdateTeamPlayerMutation>(UpdateTeamPlayerDocument, variables, requestHeaders));
+    },
+    findMatch(variables: FindMatchQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<FindMatchQuery> {
+      return withWrapper(() => client.request<FindMatchQuery>(FindMatchDocument, variables, requestHeaders));
+    },
+    findTeam(variables: FindTeamQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<FindTeamQuery> {
+      return withWrapper(() => client.request<FindTeamQuery>(FindTeamDocument, variables, requestHeaders));
+    },
+    GetMatch(variables: GetMatchQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetMatchQuery> {
+      return withWrapper(() => client.request<GetMatchQuery>(GetMatchDocument, variables, requestHeaders));
     },
     GetPlayer(variables?: GetPlayerQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetPlayerQuery> {
       return withWrapper(() => client.request<GetPlayerQuery>(GetPlayerDocument, variables, requestHeaders));

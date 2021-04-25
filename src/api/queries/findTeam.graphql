@@ -1,0 +1,5 @@
+query findTeam($id: Int!) {
+  team(where: { id: $id }) {
+    id
+  }
+}

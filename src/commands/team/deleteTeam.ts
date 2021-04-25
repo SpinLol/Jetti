@@ -32,7 +32,7 @@ export default class DeleteTeamCommand extends Command {
     const sdk = getSdk(apiClient);
 
     try {
-      const { team } = await sdk.GetTeam({ id: teamId });
+      const { team } = await sdk.findTeam({ id: teamId });
 
       if (team == null) {
         return message.say(WarningEmbed(`Team with ID ${teamId} was not found`));

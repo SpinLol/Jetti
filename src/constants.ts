@@ -20,4 +20,4 @@ export const colors = {
   success: '#28a745',
 };
 
-export const allMaps = ['BIND', 'SPLIT', 'ASCENT', 'ICEBOX', 'HAVEN'];
+export const allMaps = ['BIND', 'SPLIT', 'ASCENT', 'ICEBOX', 'HAVEN', 'BREEZE'];

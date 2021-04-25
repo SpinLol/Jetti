@@ -86,7 +86,8 @@ export enum Map {
   Split = 'SPLIT',
   Haven = 'HAVEN',
   Ascent = 'ASCENT',
-  Icebox = 'ICEBOX'
+  Icebox = 'ICEBOX',
+  Breeze = 'BREEZE'
 }
 
 export type Match = {

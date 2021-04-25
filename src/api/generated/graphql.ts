@@ -1976,6 +1976,58 @@ export type DeleteTeamMutation = (
   )> }
 );
 
+export type GetMatchQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetMatchQuery = (
+  { __typename?: 'Query' }
+  & { match?: Maybe<(
+    { __typename?: 'Match' }
+    & Pick<Match, 'matchResult' | 'screenshotPath' | 'map' | 'updatedAt'>
+    & { Team1?: Maybe<(
+      { __typename?: 'Team' }
+      & Pick<Team, 'teamName'>
+      & { PlayerH1?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH2?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH3?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH4?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH5?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )> }
+    )>, Team2?: Maybe<(
+      { __typename?: 'Team' }
+      & Pick<Team, 'teamName'>
+      & { PlayerH1?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH2?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH3?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH4?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH5?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )> }
+    )> }
+  )> }
+);
+
 export type RemovePlayerMutationVariables = Exact<{
   userId: Scalars['String'];
 }>;
@@ -2224,6 +2276,70 @@ export const DeleteTeamDocument = gql`
   }
 }
     `;
+export const GetMatchDocument = gql`
+    query GetMatch($id: Int!) {
+  match(where: {id: $id}) {
+    matchResult
+    screenshotPath
+    map
+    updatedAt
+    Team1 {
+      teamName
+      PlayerH1 {
+        userTag
+        skillLevel
+      }
+      PlayerH1 {
+        userTag
+        skillLevel
+      }
+      PlayerH2 {
+        userTag
+        skillLevel
+      }
+      PlayerH3 {
+        userTag
+        skillLevel
+      }
+      PlayerH4 {
+        userTag
+        skillLevel
+      }
+      PlayerH5 {
+        userTag
+        skillLevel
+      }
+    }
+    Team2 {
+      teamName
+      PlayerH1 {
+        userTag
+        skillLevel
+      }
+      PlayerH1 {
+        userTag
+        skillLevel
+      }
+      PlayerH2 {
+        userTag
+        skillLevel
+      }
+      PlayerH3 {
+        userTag
+        skillLevel
+      }
+      PlayerH4 {
+        userTag
+        skillLevel
+      }
+      PlayerH5 {
+        userTag
+        skillLevel
+      }
+    }
+  }
+}
+    `;
 export const RemovePlayerDocument = gql`
     mutation RemovePlayer($userId: String!) {
   removedPlayer: deletePlayer(where: {userId: $userId}) {
@@ -2424,6 +2540,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     DeleteTeam(variables: DeleteTeamMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<DeleteTeamMutation> {
       return withWrapper(() => client.request<DeleteTeamMutation>(DeleteTeamDocument, variables, requestHeaders));
+    },
+    GetMatch(variables: GetMatchQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetMatchQuery> {
+      return withWrapper(() => client.request<GetMatchQuery>(GetMatchDocument, variables, requestHeaders));
     },
     RemovePlayer(variables: RemovePlayerMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<RemovePlayerMutation> {
       return withWrapper(() => client.request<RemovePlayerMutation>(RemovePlayerDocument, variables, requestHeaders));

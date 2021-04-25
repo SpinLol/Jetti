@@ -2,15 +2,13 @@ import { MessageEmbed, User } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { apiClient } from '../../api/client';
 import { getSdk, Map } from '../../api/generated/graphql';
-import { colors } from '../../constants';
+import { allMaps, colors } from '../../constants';
 import { ErrorEmbed } from '../../core/customEmbeds';
 
 interface PromptArgs {
   user: User;
   map: string;
 }
-
-const allMaps = ['BIND', 'SPLIT', 'ASCENT', 'ICEBOX', 'HAVEN'];
 
 export default class UpdatePlayerMapCommand extends Command {
   constructor(client: CommandoClient) {

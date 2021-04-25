@@ -2071,6 +2071,20 @@ export type SwapPlayerHMutation = (
   )> }
 );
 
+export type UpdateMatchMapMutationVariables = Exact<{
+  id: Scalars['Int'];
+  map: Map;
+}>;
+
+
+export type UpdateMatchMapMutation = (
+  { __typename?: 'Mutation' }
+  & { updatedMatch?: Maybe<(
+    { __typename?: 'Match' }
+    & Pick<Match, 'map'>
+  )> }
+);
+
 export type UpdateMatchResultMutationVariables = Exact<{
   id: Scalars['Int'];
   result: Scalars['Int'];
@@ -2246,6 +2260,19 @@ export type GetMatchQuery = (
         & Pick<PlayerH, 'userTag' | 'skillLevel'>
       )> }
     )> }
+  )> }
+);
+
+export type GetMatchMapQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetMatchMapQuery = (
+  { __typename?: 'Query' }
+  & { match?: Maybe<(
+    { __typename?: 'Match' }
+    & Pick<Match, 'map'>
   )> }
 );
 
@@ -2529,6 +2556,13 @@ export const SwapPlayerHDocument = gql`
   }
 }
     `;
+export const UpdateMatchMapDocument = gql`
+    mutation UpdateMatchMap($id: Int!, $map: Map!) {
+  updatedMatch: updateMatch(where: {id: $id}, data: {map: {set: $map}}) {
+    map
+  }
+}
+    `;
 export const UpdateMatchResultDocument = gql`
     mutation UpdateMatchResult($id: Int!, $result: Int!) {
   updatedMatch: updateMatch(where: {id: $id}, data: {matchResult: {set: $result}}) {
@@ -2679,6 +2713,13 @@ export const GetMatchDocument = gql`
         skillLevel
       }
     }
+  }
+}
+    `;
+export const GetMatchMapDocument = gql`
+    query GetMatchMap($id: Int!) {
+  match(where: {id: $id}) {
+    map
   }
 }
     `;
@@ -2836,6 +2877,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     SwapPlayerH(variables: SwapPlayerHMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<SwapPlayerHMutation> {
       return withWrapper(() => client.request<SwapPlayerHMutation>(SwapPlayerHDocument, variables, requestHeaders));
     },
+    UpdateMatchMap(variables: UpdateMatchMapMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateMatchMapMutation> {
+      return withWrapper(() => client.request<UpdateMatchMapMutation>(UpdateMatchMapDocument, variables, requestHeaders));
+    },
     UpdateMatchResult(variables: UpdateMatchResultMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateMatchResultMutation> {
       return withWrapper(() => client.request<UpdateMatchResultMutation>(UpdateMatchResultDocument, variables, requestHeaders));
     },
@@ -2862,6 +2906,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     GetMatch(variables: GetMatchQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetMatchQuery> {
       return withWrapper(() => client.request<GetMatchQuery>(GetMatchDocument, variables, requestHeaders));
+    },
+    GetMatchMap(variables: GetMatchMapQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetMatchMapQuery> {
+      return withWrapper(() => client.request<GetMatchMapQuery>(GetMatchMapDocument, variables, requestHeaders));
     },
     GetMatchResult(variables: GetMatchResultQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetMatchResultQuery> {
       return withWrapper(() => client.request<GetMatchResultQuery>(GetMatchResultDocument, variables, requestHeaders));

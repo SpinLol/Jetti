@@ -19,3 +19,5 @@ export const colors = {
   danger: '#dc3545',
   success: '#28a745',
 };
+
+export const allMaps = ['BIND', 'SPLIT', 'ASCENT', 'ICEBOX', 'HAVEN'];

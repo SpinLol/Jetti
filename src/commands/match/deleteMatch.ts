@@ -25,6 +25,7 @@ export default class DeleteMatchCommand extends Command {
           type: 'integer',
         },
       ],
+      ownerOnly: true,
     });
   }
 

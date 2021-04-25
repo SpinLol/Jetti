@@ -25,6 +25,7 @@ export default class DeleteTeamCommand extends Command {
           type: 'integer',
         },
       ],
+      ownerOnly: true,
     });
   }
 

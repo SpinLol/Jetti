@@ -26,6 +26,7 @@ export default class RemovePlayerCommand extends Command {
           type: 'user',
         },
       ],
+      ownerOnly: true,
     });
   }
 

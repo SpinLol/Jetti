@@ -1,0 +1,61 @@
+mutation AddMatch($team1Id: Int!, $team2Id: Int!) {
+  match: createMatch(
+    data: { matchResult: 0, Team1: { connect: { id: $team1Id } }, Team2: { connect: { id: $team2Id } } }
+  ) {
+    id
+    Team1 {
+      teamName
+      PlayerH1 {
+        userTag
+        skillLevel
+      }
+      PlayerH1 {
+        userTag
+        skillLevel
+      }
+      PlayerH2 {
+        userTag
+        skillLevel
+      }
+      PlayerH3 {
+        userTag
+        skillLevel
+      }
+      PlayerH4 {
+        userTag
+        skillLevel
+      }
+      PlayerH5 {
+        userTag
+        skillLevel
+      }
+    }
+    Team2 {
+      teamName
+      PlayerH1 {
+        userTag
+        skillLevel
+      }
+      PlayerH1 {
+        userTag
+        skillLevel
+      }
+      PlayerH2 {
+        userTag
+        skillLevel
+      }
+      PlayerH3 {
+        userTag
+        skillLevel
+      }
+      PlayerH4 {
+        userTag
+        skillLevel
+      }
+      PlayerH5 {
+        userTag
+        skillLevel
+      }
+    }
+  }
+}

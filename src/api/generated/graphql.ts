@@ -1934,6 +1934,59 @@ export type TeamWhereUniqueInput = {
   id?: Maybe<Scalars['Int']>;
 };
 
+export type AddMatchMutationVariables = Exact<{
+  team1Id: Scalars['Int'];
+  team2Id: Scalars['Int'];
+}>;
+
+
+export type AddMatchMutation = (
+  { __typename?: 'Mutation' }
+  & { match: (
+    { __typename?: 'Match' }
+    & Pick<Match, 'id'>
+    & { Team1?: Maybe<(
+      { __typename?: 'Team' }
+      & Pick<Team, 'teamName'>
+      & { PlayerH1?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH2?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH3?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH4?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH5?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )> }
+    )>, Team2?: Maybe<(
+      { __typename?: 'Team' }
+      & Pick<Team, 'teamName'>
+      & { PlayerH1?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH2?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH3?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH4?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )>, PlayerH5?: Maybe<(
+        { __typename?: 'PlayerH' }
+        & Pick<PlayerH, 'userTag' | 'skillLevel'>
+      )> }
+    )> }
+  ) }
+);
+
 export type AddPlayerMutationVariables = Exact<{
   userId: Scalars['String'];
   level: Scalars['Float'];
@@ -2247,7 +2300,84 @@ export type GetTeamNameQuery = (
   )> }
 );
 
+export type GetTeamsQueryVariables = Exact<{
+  id1: Scalars['Int'];
+  id2: Scalars['Int'];
+}>;
 
+
+export type GetTeamsQuery = (
+  { __typename?: 'Query' }
+  & { teams: Array<(
+    { __typename?: 'Team' }
+    & Pick<Team, 'id'>
+  )> }
+);
+
+
+export const AddMatchDocument = gql`
+    mutation AddMatch($team1Id: Int!, $team2Id: Int!) {
+  match: createMatch(
+    data: {matchResult: 0, Team1: {connect: {id: $team1Id}}, Team2: {connect: {id: $team2Id}}}
+  ) {
+    id
+    Team1 {
+      teamName
+      PlayerH1 {
+        userTag
+        skillLevel
+      }
+      PlayerH1 {
+        userTag
+        skillLevel
+      }
+      PlayerH2 {
+        userTag
+        skillLevel
+      }
+      PlayerH3 {
+        userTag
+        skillLevel
+      }
+      PlayerH4 {
+        userTag
+        skillLevel
+      }
+      PlayerH5 {
+        userTag
+        skillLevel
+      }
+    }
+    Team2 {
+      teamName
+      PlayerH1 {
+        userTag
+        skillLevel
+      }
+      PlayerH1 {
+        userTag
+        skillLevel
+      }
+      PlayerH2 {
+        userTag
+        skillLevel
+      }
+      PlayerH3 {
+        userTag
+        skillLevel
+      }
+      PlayerH4 {
+        userTag
+        skillLevel
+      }
+      PlayerH5 {
+        userTag
+        skillLevel
+      }
+    }
+  }
+}
+    `;
 export const AddPlayerDocument = gql`
     mutation AddPlayer($userId: String!, $level: Float!, $userTag: String!, $imageUrl: String!) {
   newPlayer: createPlayer(
@@ -2524,6 +2654,13 @@ export const GetTeamNameDocument = gql`
   }
 }
     `;
+export const GetTeamsDocument = gql`
+    query GetTeams($id1: Int!, $id2: Int!) {
+  teams(where: {id: {in: [$id1, $id2]}}) {
+    id
+  }
+}
+    `;
 
 export type SdkFunctionWrapper = <T>(action: () => Promise<T>) => Promise<T>;
 
@@ -2532,6 +2669,9 @@ const defaultWrapper: SdkFunctionWrapper = sdkFunction => sdkFunction();
 
 export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = defaultWrapper) {
   return {
+    AddMatch(variables: AddMatchMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<AddMatchMutation> {
+      return withWrapper(() => client.request<AddMatchMutation>(AddMatchDocument, variables, requestHeaders));
+    },
     AddPlayer(variables: AddPlayerMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<AddPlayerMutation> {
       return withWrapper(() => client.request<AddPlayerMutation>(AddPlayerDocument, variables, requestHeaders));
     },
@@ -2579,6 +2719,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     GetTeamName(variables: GetTeamNameQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetTeamNameQuery> {
       return withWrapper(() => client.request<GetTeamNameQuery>(GetTeamNameDocument, variables, requestHeaders));
+    },
+    GetTeams(variables: GetTeamsQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetTeamsQuery> {
+      return withWrapper(() => client.request<GetTeamsQuery>(GetTeamsDocument, variables, requestHeaders));
     }
   };
 }

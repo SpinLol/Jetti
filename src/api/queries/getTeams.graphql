@@ -1,0 +1,5 @@
+query GetTeams($id1: Int!, $id2: Int!) {
+  teams(where: { id: { in: [$id1, $id2] } }) {
+    id
+  }
+}

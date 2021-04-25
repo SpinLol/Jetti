@@ -50,7 +50,10 @@ export default class AddPlayerCommand extends Command {
         userId: user.id,
         level: level,
         userTag: user.tag,
-        imageUrl: user.avatarURL({ size: 2048 }),
+        imageUrl:
+          user.avatarURL() != null
+            ? user.avatarURL({ size: 2048 })
+            : `https://cdn.discordapp.com/embed/avatars/${Number(user.discriminator) % 5}.png`,
       });
 
       return message.say(

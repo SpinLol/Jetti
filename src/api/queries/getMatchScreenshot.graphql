@@ -1,0 +1,5 @@
+query GetMatchScreenshot($id: Int!) {
+  match(where: { id: $id }) {
+    screenshotPath
+  }
+}

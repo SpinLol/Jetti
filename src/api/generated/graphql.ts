@@ -2085,6 +2085,20 @@ export type UpdateMatchResultMutation = (
   )> }
 );
 
+export type UpdateMatchScreenshotMutationVariables = Exact<{
+  id: Scalars['Int'];
+  screenshot: Scalars['String'];
+}>;
+
+
+export type UpdateMatchScreenshotMutation = (
+  { __typename?: 'Mutation' }
+  & { updatedMatch?: Maybe<(
+    { __typename?: 'Match' }
+    & Pick<Match, 'screenshotPath'>
+  )> }
+);
+
 export type UpdatePlayerMapMutationVariables = Exact<{
   userId: Scalars['String'];
   map: Map;
@@ -2245,6 +2259,19 @@ export type GetMatchResultQuery = (
   & { match?: Maybe<(
     { __typename?: 'Match' }
     & Pick<Match, 'matchResult'>
+  )> }
+);
+
+export type GetMatchScreenshotQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetMatchScreenshotQuery = (
+  { __typename?: 'Query' }
+  & { match?: Maybe<(
+    { __typename?: 'Match' }
+    & Pick<Match, 'screenshotPath'>
   )> }
 );
 
@@ -2510,6 +2537,16 @@ export const UpdateMatchResultDocument = gql`
   }
 }
     `;
+export const UpdateMatchScreenshotDocument = gql`
+    mutation UpdateMatchScreenshot($id: Int!, $screenshot: String!) {
+  updatedMatch: updateMatch(
+    where: {id: $id}
+    data: {screenshotPath: {set: $screenshot}}
+  ) {
+    screenshotPath
+  }
+}
+    `;
 export const UpdatePlayerMapDocument = gql`
     mutation UpdatePlayerMap($userId: String!, $map: Map!) {
   updatedPlayer: updatePlayer(
@@ -2649,6 +2686,13 @@ export const GetMatchResultDocument = gql`
     query GetMatchResult($id: Int!) {
   match(where: {id: $id}) {
     matchResult
+  }
+}
+    `;
+export const GetMatchScreenshotDocument = gql`
+    query GetMatchScreenshot($id: Int!) {
+  match(where: {id: $id}) {
+    screenshotPath
   }
 }
     `;
@@ -2795,6 +2839,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     UpdateMatchResult(variables: UpdateMatchResultMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateMatchResultMutation> {
       return withWrapper(() => client.request<UpdateMatchResultMutation>(UpdateMatchResultDocument, variables, requestHeaders));
     },
+    UpdateMatchScreenshot(variables: UpdateMatchScreenshotMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdateMatchScreenshotMutation> {
+      return withWrapper(() => client.request<UpdateMatchScreenshotMutation>(UpdateMatchScreenshotDocument, variables, requestHeaders));
+    },
     UpdatePlayerMap(variables: UpdatePlayerMapMutationVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<UpdatePlayerMapMutation> {
       return withWrapper(() => client.request<UpdatePlayerMapMutation>(UpdatePlayerMapDocument, variables, requestHeaders));
     },
@@ -2818,6 +2865,9 @@ export function getSdk(client: GraphQLClient, withWrapper: SdkFunctionWrapper = 
     },
     GetMatchResult(variables: GetMatchResultQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetMatchResultQuery> {
       return withWrapper(() => client.request<GetMatchResultQuery>(GetMatchResultDocument, variables, requestHeaders));
+    },
+    GetMatchScreenshot(variables: GetMatchScreenshotQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetMatchScreenshotQuery> {
+      return withWrapper(() => client.request<GetMatchScreenshotQuery>(GetMatchScreenshotDocument, variables, requestHeaders));
     },
     GetPlayer(variables?: GetPlayerQueryVariables, requestHeaders?: Dom.RequestInit["headers"]): Promise<GetPlayerQuery> {
       return withWrapper(() => client.request<GetPlayerQuery>(GetPlayerDocument, variables, requestHeaders));

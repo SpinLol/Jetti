@@ -3,7 +3,7 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { apiClient } from '../../api/client';
 import { getSdk } from '../../api/generated/graphql';
 import { colors } from '../../constants';
-import { ErrorEmbed } from '../../core/customEmbeds';
+import { ErrorEmbed, WarningEmbed } from '../../core/customEmbeds';
 import { printLevelName } from '../../core/print';
 
 interface PromptArgs {
@@ -43,7 +43,7 @@ export default class AddPlayerCommand extends Command {
       const { player } = await sdk.GetPlayer({ userId: user.id });
 
       if (player != null) {
-        return message.reply(`Player \`${user.tag}\` was already added!`);
+        return message.say(WarningEmbed(`Player \`${user.tag}\` was already added!`));
       }
 
       const { newPlayer } = await sdk.AddPlayer({

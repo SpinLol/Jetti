@@ -9,7 +9,7 @@ interface PromptArgs {
   matchId: number;
 }
 
-export default class UpdateMatchScreenshot extends Command {
+export default class UpdateMatchScreenshotCommand extends Command {
   constructor(client: CommandoClient) {
     super(client, {
       name: 'update-match-screenshot',

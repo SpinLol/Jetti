@@ -25,6 +25,6 @@ export default class GetUserImageCommand extends Command {
   }
 
   async run(message: CommandoMessage, { user }: PromptArgs) {
-    return message.say(`\`${user.avatarURL({ size: 2048 })}\``);
+    return message.say(user.avatarURL({ size: 2048 }));
   }
 }

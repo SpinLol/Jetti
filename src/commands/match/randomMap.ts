@@ -1,6 +1,7 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { Player } from '../../db/models';
 import { MessageReaction } from 'discord.js';
+import { emojiList } from '../../constants';
 
 export const allMaps = ['ASCENT', 'BIND', 'HAVEN', 'ICEBOX', 'SPLIT'] as const;
 export type ValorantMaps = typeof allMaps;
@@ -52,30 +53,37 @@ export default class RandomMapCommand extends Command {
     }
 
     const index1 = Math.floor(Math.random() * poolMaps.length);
+    const emoji1 = Math.floor(Math.random() * emojiList.length);
 
     if (areTwoMaps == false || [...new Set(poolMaps)].length == 1) {
       return msg.say(poolMaps[index1]);
     }
 
     let index2 = 0;
+    let emoji2 = 0;
 
     do {
       index2 = Math.floor(Math.random() * poolMaps.length);
-    } while (poolMaps[index2] == poolMaps[index1]);
+      emoji2 = Math.floor(Math.random() * emojiList.length);
+    } while (poolMaps[index2] == poolMaps[index1] || emoji1 == emoji2);
 
-    const pollTopic = await msg.say([`✌️ : ${poolMaps[index1]}`, `😙 : ${poolMaps[index2]}`]);
+    const pollTopic = await msg.say([
+      `${emojiList[emoji1]} : ${poolMaps[index1]}`,
+      `${emojiList[emoji2]} : ${poolMaps[index2]}`,
+    ]);
 
-    await pollTopic.react('✌️');
-    await pollTopic.react('😙');
+    await pollTopic.react(emojiList[emoji1]);
+    await pollTopic.react(emojiList[emoji2]);
 
     const major = Math.floor(players.length / 2) + 1;
-    const filter = (reaction: MessageReaction) => reaction.emoji.name === '✌️' || reaction.emoji.name === '😙';
-    const collector = pollTopic.createReactionCollector(filter, { time: 1000 * 10 });
+    const filter = (reaction: MessageReaction) =>
+      reaction.emoji.name === emojiList[emoji1] || reaction.emoji.name === emojiList[emoji2];
+    const collector = pollTopic.createReactionCollector(filter, { time: 1000 * 60 });
 
     collector.on('collect', (r) => {
       if (r.count > major) {
         collector.stop();
-        msg.say(poolMaps[r.emoji.toString() === '✌️' ? index1 : index2] + ' has won!');
+        msg.say(poolMaps[r.emoji.toString() === emojiList[emoji1] ? index1 : index2] + ' has won!');
       }
     });
     collector.on('end', async (_, reason) => {

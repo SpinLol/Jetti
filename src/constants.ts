@@ -13,3 +13,4 @@ export const botStatus: ActivityOptions[] = [
 ];
 export const userAndi = '265526209662812161';
 export const userGlup3 = '215409398883811329';
+export const emojiList = ['😳', '😱', '😎', '😇', '😏', '😙', '💩', '👌', '✌', '🙏', '🐣', '⭐', '👻', '🎅', '🔫'];

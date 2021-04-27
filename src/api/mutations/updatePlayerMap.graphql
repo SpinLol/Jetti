@@ -1,0 +1,6 @@
+mutation UpdatePlayerMap($userId: String!, $map: Map!) {
+  updatedPlayer: updatePlayer(where: { userId: $userId }, data: { favoriteMap: { set: $map } }) {
+    id
+    favoriteMap
+  }
+}

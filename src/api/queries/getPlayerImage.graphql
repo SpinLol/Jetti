@@ -1,0 +1,5 @@
+query GetPlayerImage($userId: String!) {
+  player(where: { userId: $userId }) {
+    imageUrl
+  }
+}

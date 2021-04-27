@@ -1,0 +1,5 @@
+query GetMatchMap($id: Int!) {
+  match(where: { id: $id }) {
+    map
+  }
+}

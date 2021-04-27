@@ -1,0 +1,25 @@
+query GetTeam($id: Int!) {
+  team(where: { id: $id }) {
+    teamName
+    PlayerH1 {
+      userTag
+      skillLevel
+    }
+    PlayerH2 {
+      userTag
+      skillLevel
+    }
+    PlayerH3 {
+      userTag
+      skillLevel
+    }
+    PlayerH4 {
+      userTag
+      skillLevel
+    }
+    PlayerH5 {
+      userTag
+      skillLevel
+    }
+  }
+}

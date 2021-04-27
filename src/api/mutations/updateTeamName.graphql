@@ -1,0 +1,6 @@
+mutation UpdateTeamName($id: Int!, $name: String!) {
+  updatedTeam: updateTeam(where: { id: $id }, data: { teamName: { set: $name } }) {
+    id
+    teamName
+  }
+}

@@ -1,0 +1,6 @@
+mutation UpdatePlayerSkill($userId: String, $level: Float) {
+  updatedPlayer: updatePlayer(where: { userId: $userId }, data: { skillLevel: { set: $level } }) {
+    id
+    skillLevel
+  }
+}

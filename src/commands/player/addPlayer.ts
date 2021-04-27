@@ -1,7 +1,10 @@
-import { User } from 'discord.js';
+import { MessageEmbed, User } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-
-import { Player } from '../../db/models';
+import { apiClient } from '../../api/client';
+import { getSdk } from '../../api/generated/graphql';
+import { colors } from '../../constants';
+import { ErrorEmbed, WarningEmbed } from '../../core/customEmbeds';
+import { printLevelName } from '../../core/print';
 
 interface PromptArgs {
   user: User;
@@ -12,10 +15,10 @@ export default class AddPlayerCommand extends Command {
   constructor(client: CommandoClient) {
     super(client, {
       name: 'add-player',
-      aliases: ['add', 'a'],
+      aliases: ['ap'],
       group: 'player',
-      memberName: 'add',
-      description: 'Adds a new Player to the db',
+      memberName: 'add-player',
+      description: 'Adds a new Player to the database',
       argsCount: 2,
       args: [
         {
@@ -27,28 +30,53 @@ export default class AddPlayerCommand extends Command {
           key: 'level',
           prompt: "What's his/her skill level?",
           type: 'float',
-          validate: (level: number) => level >= 1 && level <= 6,
+          validate: (level: number) => level >= 1 && level <= 8,
         },
       ],
     });
   }
 
-  async run(msg: CommandoMessage, { user, level }: PromptArgs) {
-    const foundPlayer = await Player.findOne({
-      where: { userId: user.id },
-    });
+  async run(message: CommandoMessage, { user, level }: PromptArgs) {
+    const sdk = getSdk(apiClient);
 
-    if (foundPlayer != null) {
-      return msg.say(`Player \`${user.tag}\` was already added!`);
+    try {
+      const { player } = await sdk.GetPlayer({ userId: user.id });
+
+      if (player != null) {
+        return message.say(WarningEmbed(`Player \`${user.tag}\` was already added!`));
+      }
+
+      const { newPlayer } = await sdk.AddPlayer({
+        userId: user.id,
+        level: level,
+        userTag: user.tag,
+        imageUrl:
+          user.avatarURL() != null
+            ? user.avatarURL({ size: 2048 })
+            : `https://cdn.discordapp.com/embed/avatars/${Number(user.discriminator) % 5}.png`,
+      });
+
+      return message.say(
+        new MessageEmbed({
+          color: colors.success,
+          title: newPlayer.userTag,
+          description: 'Player was successfully added!',
+          fields: [
+            {
+              name: 'Skill Level',
+              value: `${printLevelName(newPlayer.skillLevel)} (${newPlayer.skillLevel})`,
+              inline: true,
+            },
+            { name: 'Favorite Map', value: newPlayer.favoriteMap, inline: true },
+          ],
+          image: { url: newPlayer.imageUrl },
+          timestamp: Date.now(),
+          footer: { text: user.id },
+        }),
+      );
+    } catch (err) {
+      console.error(err);
+      return message.say(ErrorEmbed(err.message));
     }
-
-    const player = new Player({
-      userId: user.id,
-      skillLevel: level,
-      userTag: msg.guild.members.cache.get(user.id).user.tag,
-    });
-    await player.save();
-
-    return msg.say(`Player \`${player.userTag}\` has the skill level ${player.skillLevel} and was added successfully!`);
   }
 }

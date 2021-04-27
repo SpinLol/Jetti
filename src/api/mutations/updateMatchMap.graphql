@@ -1,0 +1,5 @@
+mutation UpdateMatchMap($id: Int!, $map: Map!) {
+  updatedMatch: updateMatch(where: { id: $id }, data: { map: { set: $map } }) {
+    map
+  }
+}

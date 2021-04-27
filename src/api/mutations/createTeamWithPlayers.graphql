@@ -1,0 +1,6 @@
+mutation CreateTeamWithPlayers($data: TeamCreateInput!) {
+  team: createTeam(data: $data) {
+    id
+    teamName
+  }
+}

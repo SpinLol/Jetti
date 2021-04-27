@@ -1,5 +1,9 @@
+import { MessageEmbed } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { userAndi } from '../../constants';
+import { apiClient } from '../../api/client';
+import { getSdk } from '../../api/generated/graphql';
+import { colors, neededUsers, userAndi } from '../../constants';
+import { ErrorEmbed, WarningEmbed } from '../../core/customEmbeds';
 import { shuffle } from '../../util/arrayHelper';
 
 const andiResponses = [
@@ -20,84 +24,87 @@ const andiResponses = [
   'no u - Glup3',
 ];
 
-export default class numberPickingCommand extends Command {
+export default class NumberPickingCommand extends Command {
   constructor(client: CommandoClient) {
     super(client, {
-      name: 'number-pick',
+      name: 'number-picking',
       aliases: ['andi', 'ondi'],
       group: 'team',
-      memberName: 'andi',
-      description: 'Provides users with numbers for "picking-by-numbers"',
+      memberName: 'number-picking',
+      description: 'Sends every user a random number',
     });
   }
 
-  async run(msg: CommandoMessage, rawArgs: string) {
-    const neededUsers = 10;
-    let userIds: string[];
-    const channel = msg.member.voice.channel;
-    const chance = Math.random();
+  async run(message: CommandoMessage) {
+    const userIds: string[] = [];
+    const channel = message.member.voice.channel;
 
-    if (msg.author.id === userAndi && chance < 0.1) {
-      if (chance < 0.01) {
-        for (let i = 1; i <= 10; i++) {
-          msg.author.send(`Your Number is: ${i}`);
-        }
-
-        return msg;
-      }
-
-      return msg.say(andiResponses[Math.floor(Math.random() * andiResponses.length)]);
+    if (channel != null) {
+      userIds.push(...channel.members.map((_, k) => k));
     }
-
-    if (rawArgs.trim() === '') {
-      if (channel == null) {
-        return msg.reply('You are not in a voice channel!');
-      }
-
-      if (channel.members.size < neededUsers) {
-        return msg.say('There are not enough players in the voice channel.');
-      } else if (channel.members.size > neededUsers) {
-        return msg.say('There are too many players in the voice channel. Can not choose players.');
-      }
-
-      userIds = channel.members.map((_, k) => k);
-      return await this.distributeNumbers(msg, userIds);
-    }
-
-    if (channel == null && msg.mentions.users.size == 0) {
-      return msg.reply('You are not in a voice channel and forgot to mention enough players.');
-    }
-
-    if (msg.mentions.users.size == 0) {
-      return msg.say('You forgot to choose the remaining players.');
-    }
-
-    if (msg.mentions.users.size == neededUsers) {
-      userIds = msg.mentions.users.map((_, k) => k);
-      return await this.distributeNumbers(msg, userIds);
-    }
-
-    if (channel == null) {
-      return msg.reply('You are not in a voice channel.');
-    }
-
-    userIds = channel.members.map((_, k) => k).concat(msg.mentions.users.map((_, k) => k));
+    userIds.push(...message.mentions.users.map((_, k) => k));
 
     if (userIds.length < neededUsers) {
-      return msg.reply(`You didn't mention enough players. ${neededUsers - userIds.length} players are missing.`);
-    } else if (userIds.length > neededUsers) {
-      return msg.reply(`You mentioned too many players. You need ${neededUsers} players, not ${userIds.length}`);
+      return message.say(WarningEmbed('Not enough players selected'));
     }
 
-    return await this.distributeNumbers(msg, userIds);
-  }
-
-  async distributeNumbers(msg: CommandoMessage, userIds: string[]) {
-    userIds = shuffle(userIds);
-    for (let i = 0; i < userIds.length; i++) {
-      const guildMember = await msg.guild.members.fetch(userIds[i]);
-      guildMember.user.send(`Your number is: ${i + 1}`);
+    if (userIds.length > neededUsers) {
+      return message.say(WarningEmbed('Too many players selected'));
     }
-    return msg.say('Sent all users their number. Start picking!');
+
+    const sdk = getSdk(apiClient);
+    const { players } = await sdk.GetPlayersWithUserIds({ userIds: userIds });
+
+    const missingUsers = userIds.filter((userId) => {
+      return players.find((player) => player.userId === userId) == undefined;
+    });
+
+    if (missingUsers.length > 0) {
+      return message.say(WarningEmbed(`Some players are missing in the database! Try ${this.client.commandPrefix}lmp`));
+    }
+
+    const chance = Math.random();
+
+    if (message.author.id === userAndi && chance <= 0.9) {
+      if (chance <= 0.01) {
+        for (let i = 1; i <= 10; i++) {
+          await message.author.send(`Your Number is: ${i}`);
+        }
+
+        return message;
+      }
+
+      return message.say(andiResponses[Math.floor(Math.random() * andiResponses.length)]);
+    }
+
+    shuffle(userIds);
+
+    try {
+      for (let i = 1; i <= userIds.length; i++) {
+        const guildMember = await message.guild.members.fetch(userIds[i - 1]);
+
+        guildMember.send(
+          new MessageEmbed({
+            title: i === 1 || i === 2 ? `Team Captain ${i} (${i === 1 ? 'Attacker' : 'Defender'})` : 'Player',
+            description: `Your number is **${i}**!`,
+            color: colors.primary,
+            timestamp: Date.now(),
+            footer: { text: guildMember.user.tag },
+          }),
+        );
+      }
+    } catch (err) {
+      console.error(err);
+      return message.say(ErrorEmbed(err.message));
+    }
+
+    return message.say(
+      new MessageEmbed({
+        title: 'Finished distributing numbers',
+        description: 'All Players have received their number. Team Captains can choose their Players now!',
+        color: colors.success,
+        timestamp: Date.now(),
+      }),
+    );
   }
 }

@@ -1,10 +1,13 @@
+import { MessageEmbed } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-
-import { Match } from '../../db/models';
+import { apiClient } from '../../api/client';
+import { getSdk } from '../../api/generated/graphql';
+import { colors } from '../../constants';
+import { ErrorEmbed, WarningEmbed } from '../../core/customEmbeds';
 
 interface PromptArgs {
   matchId: number;
-  matchResult: number;
+  matchResult: string;
 }
 
 export default class UpdateMatchResultCommand extends Command {
@@ -25,27 +28,36 @@ export default class UpdateMatchResultCommand extends Command {
         {
           key: 'matchResult',
           prompt: 'Who won? Team1 = 1, Team2 = 2, Draw = 0',
-          type: 'integer',
+          type: 'string',
           oneOf: ['0', '1', '2'],
         },
       ],
     });
   }
 
-  async run(msg: CommandoMessage, { matchId, matchResult }: PromptArgs) {
-    const match = await Match.findOne({ where: { id: matchId }, include: [{ all: true }] });
+  async run(message: CommandoMessage, { matchId, matchResult }: PromptArgs) {
+    const sdk = getSdk(apiClient);
 
-    if (match == null) {
-      return msg.say(`Match with ID ${matchId} was not found!`);
+    try {
+      const { match } = await sdk.GetMatchResult({ id: matchId });
+
+      if (match == null) {
+        return message.say(WarningEmbed(`Match with ID ${matchId} was not found!`));
+      }
+
+      const { updatedMatch } = await sdk.UpdateMatchResult({ id: matchId, result: Number(matchResult) });
+
+      return message.say(
+        new MessageEmbed({
+          color: colors.success,
+          title: `Match ID ${matchId}`,
+          description: `Updated match result from ${match.matchResult} to ${updatedMatch.matchResult}`,
+          timestamp: Date.now(),
+        }),
+      );
+    } catch (err) {
+      console.error(err);
+      return message.say(ErrorEmbed(err.message));
     }
-
-    const oldMatchResult = match.getOutcome();
-
-    match.matchResult = matchResult;
-    match.save();
-
-    return msg.say(
-      `Match Result was changed from \`${oldMatchResult}\` to \`${match.getOutcome()}\` for Match ID ${match.id}`,
-    );
   }
 }

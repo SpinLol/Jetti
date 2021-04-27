@@ -1,0 +1,5 @@
+mutation UpdatePlayerImage($userId: String!, $image: String!) {
+  updatedPlayer: updatePlayer(where: { userId: $userId }, data: { imageUrl: { set: $image } }) {
+    imageUrl
+  }
+}

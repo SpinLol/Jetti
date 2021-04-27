@@ -1,8 +1,10 @@
-import { User } from 'discord.js';
+import { User, MessageEmbed } from 'discord.js';
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { neededUsers } from '../../constants';
-
-import { Player, PlayerH, Team } from '../../db/models';
+import { apiClient } from '../../api/client';
+import { getSdk } from '../../api/generated/graphql';
+import { playerToString } from '../../core/print';
+import { colors } from '../../constants';
+import { ErrorEmbed } from '../../core/customEmbeds';
 
 interface PromptArgs {
   teamName: string;
@@ -57,75 +59,80 @@ export default class AddTeamCommand extends Command {
     });
   }
 
-  async run(msg: CommandoMessage, { teamName, user1, user2, user3, user4, user5 }: PromptArgs) {
-    const neededPlayers = Math.ceil(neededUsers / 2);
-    const userIds = [user1.id, user2.id, user3.id, user4.id, user5.id];
-    const foundPlayers = await Player.findAll({
-      where: { userId: userIds },
-    });
+  async run(message: CommandoMessage, { teamName, user1, user2, user3, user4, user5 }: PromptArgs) {
+    const sdk = getSdk(apiClient);
 
-    if (foundPlayers.length < neededPlayers) {
-      return msg.say(
-        `Some of your players need to be in the database first! Amount: ${neededPlayers - foundPlayers.length}`,
+    try {
+      const { players } = await sdk.GetPlayers({
+        userIds: [user1.id, user2.id, user3.id, user4.id, user5.id],
+      });
+
+      if (players.length < 5) {
+        return message.reply(
+          `There are missing players in the database. Use \`${this.client.commandPrefix}lmp\` to find out who`,
+        );
+      }
+
+      const { team } = await sdk.CreateTeamWithPlayers({
+        data: {
+          teamName: teamName,
+          PlayerH1: {
+            create: {
+              Player: { connect: { userId: players[0].userId } },
+              skillLevel: players[0].skillLevel,
+              userTag: players[0].userTag,
+            },
+          },
+          PlayerH2: {
+            create: {
+              Player: { connect: { userId: players[1].userId } },
+              skillLevel: players[1].skillLevel,
+              userTag: players[1].userTag,
+            },
+          },
+          PlayerH3: {
+            create: {
+              Player: { connect: { userId: players[2].userId } },
+              skillLevel: players[2].skillLevel,
+              userTag: players[2].userTag,
+            },
+          },
+          PlayerH4: {
+            create: {
+              Player: { connect: { userId: players[3].userId } },
+              skillLevel: players[3].skillLevel,
+              userTag: players[3].userTag,
+            },
+          },
+          PlayerH5: {
+            create: {
+              Player: { connect: { userId: players[4].userId } },
+              skillLevel: players[4].skillLevel,
+              userTag: players[4].userTag,
+            },
+          },
+        },
+      });
+
+      return message.say(
+        new MessageEmbed({
+          color: colors.success,
+          title: `Team ${team.teamName}`,
+          timestamp: Date.now(),
+          description: 'Team was successfully added!',
+          fields: [
+            { name: 'Player 1', value: playerToString(players[0]) },
+            { name: 'Player 2', value: playerToString(players[1]) },
+            { name: 'Player 3', value: playerToString(players[2]) },
+            { name: 'Player 4', value: playerToString(players[3]) },
+            { name: 'Player 5', value: playerToString(players[4]) },
+          ],
+          footer: { text: `Team ID: ${team.id}` },
+        }),
       );
+    } catch (err) {
+      console.error(err);
+      return message.say(ErrorEmbed(err.message));
     }
-
-    const now = Date.now();
-    const team = new Team({
-      teamName: teamName,
-    });
-
-    const player1 = new PlayerH({
-      playerId: foundPlayers[0].id,
-      player: foundPlayers[0],
-      skillLevel: foundPlayers[0].skillLevel,
-      userTag: foundPlayers[0].userTag,
-      historyDate: now,
-    });
-    const player2 = new PlayerH({
-      playerId: foundPlayers[1].id,
-      player: foundPlayers[1],
-      skillLevel: foundPlayers[1].skillLevel,
-      userTag: foundPlayers[1].userTag,
-      historyDate: now,
-    });
-    const player3 = new PlayerH({
-      playerId: foundPlayers[2].id,
-      player: foundPlayers[2],
-      skillLevel: foundPlayers[2].skillLevel,
-      userTag: foundPlayers[2].userTag,
-      historyDate: now,
-    });
-    const player4 = new PlayerH({
-      playerId: foundPlayers[3].id,
-      player: foundPlayers[3],
-      skillLevel: foundPlayers[3].skillLevel,
-      userTag: foundPlayers[3].userTag,
-      historyDate: now,
-    });
-    const player5 = new PlayerH({
-      playerId: foundPlayers[4].id,
-      player: foundPlayers[4],
-      skillLevel: foundPlayers[4].skillLevel,
-      userTag: foundPlayers[4].userTag,
-      historyDate: now,
-    });
-    await player1.save();
-    await player2.save();
-    await player3.save();
-    await player4.save();
-    await player5.save();
-
-    team.playerId1 = player1.id;
-    team.playerId2 = player2.id;
-    team.playerId3 = player3.id;
-    team.playerId4 = player4.id;
-    team.playerId5 = player5.id;
-
-    await team.save();
-
-    return msg.say(
-      `Successfully created team ${team.teamName} (ID: ${team.id}) with \`${user1.tag}\`, \`${user2.tag}\`, \`${user3.tag}\`, \`${user4.tag}\` & \`${user5.tag}\` `,
-    );
   }
 }

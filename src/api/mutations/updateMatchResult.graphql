@@ -1,0 +1,6 @@
+mutation UpdateMatchResult($id: Int!, $result: Int!) {
+  updatedMatch: updateMatch(where: { id: $id }, data: { matchResult: { set: $result } }) {
+    id
+    matchResult
+  }
+}

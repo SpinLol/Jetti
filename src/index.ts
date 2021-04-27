@@ -2,7 +2,6 @@ import { CommandoClient } from 'discord.js-commando';
 import path from 'path';
 import { botStatus } from './constants';
 import { randomStatus } from './core/status';
-import { sequelize } from './database';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
@@ -22,15 +21,8 @@ client
   .on('debug', console.log)
   .on('ready', async () => {
     console.log(`Client ready: logged in as ${client.user.username}#${client.user.discriminator} (${client.user.id})`);
-    try {
-      await sequelize.authenticate();
-      console.log('Connection to database was successfully.');
-    } catch (error) {
-      console.error('Unable to connect to database.', error);
-    }
 
     randomStatus(client);
-    console.log('Client Presence was set successfully!');
   })
   .on('disconnect', () => {
     console.warn('Disconnected');

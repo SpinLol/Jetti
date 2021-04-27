@@ -4,5 +4,6 @@ query GetPlayers($userIds: [String!]) {
     userId
     userTag
     skillLevel
+    favoriteMap
   }
 }

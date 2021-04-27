@@ -2352,7 +2352,7 @@ export type GetPlayersQuery = (
   { __typename?: 'Query' }
   & { players: Array<(
     { __typename?: 'Player' }
-    & Pick<Player, 'id' | 'userId' | 'userTag' | 'skillLevel'>
+    & Pick<Player, 'id' | 'userId' | 'userTag' | 'skillLevel' | 'favoriteMap'>
   )> }
 );
 
@@ -2799,6 +2799,7 @@ export const GetPlayersDocument = gql`
     userId
     userTag
     skillLevel
+    favoriteMap
   }
 }
     `;

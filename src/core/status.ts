@@ -1,6 +1,7 @@
 import { CommandoClient } from 'discord.js-commando';
 import cron from 'node-cron';
 import { botStatus } from '../constants';
+import { logger } from '../util/logger';
 
 export const randomStatus = (client: CommandoClient) => {
   cron.schedule('*/30 * * * *', async () => {
@@ -8,6 +9,6 @@ export const randomStatus = (client: CommandoClient) => {
       activity: botStatus[Math.floor(Math.random() * botStatus.length)],
       status: 'dnd',
     });
-    console.log('Updated bot activity');
+    logger.info('Updated bot activity');
   });
 };

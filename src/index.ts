@@ -2,6 +2,7 @@ import { CommandoClient } from 'discord.js-commando';
 import path from 'path';
 import { botStatus } from './constants';
 import { randomStatus } from './core/status';
+import { logger } from './util/logger';
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
@@ -16,16 +17,16 @@ const client = new CommandoClient({
 });
 
 client
-  .on('error', console.error)
-  .on('warn', console.warn)
-  .on('debug', console.log)
+  .on('error', logger.error.bind(logger))
+  .on('warn', logger.warn.bind(logger))
+  .on('debug', logger.debug.bind(logger))
   .on('ready', async () => {
-    console.log(`Client ready: logged in as ${client.user.username}#${client.user.discriminator} (${client.user.id})`);
+    logger.info(`Client ready: logged in as ${client.user.username}#${client.user.discriminator} (${client.user.id})`);
 
     randomStatus(client);
   })
   .on('disconnect', () => {
-    console.warn('Disconnected');
+    logger.warn('Disconnected');
   });
 
 client.registry

@@ -5,6 +5,7 @@ import { getSdk } from '../../api/generated/graphql';
 import { colors, neededUsers, userAndi } from '../../constants';
 import { ErrorEmbed, WarningEmbed } from '../../core/customEmbeds';
 import { shuffle } from '../../util/arrayHelper';
+import { logger } from '../../util/logger';
 
 const andiResponses = [
   'https://tenor.com/view/simon-cowell-thats-a-no-its-a-no-its-a-no-from-me-gif-7663264',
@@ -94,7 +95,7 @@ export default class NumberPickingCommand extends Command {
         );
       }
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       return message.say(ErrorEmbed(err.message));
     }
 

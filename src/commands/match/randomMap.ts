@@ -4,6 +4,7 @@ import { allMaps, colors, emojiList } from '../../constants';
 import { getSdk } from '../../api/generated/graphql';
 import { apiClient } from '../../api/client';
 import { ErrorEmbed, WarningEmbed } from '../../core/customEmbeds';
+import { logger } from '../../util/logger';
 
 interface PromptArgs {
   isBiased: boolean;
@@ -109,7 +110,7 @@ export default class RandomMapCommand extends Command {
         }
       });
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       return message.say(ErrorEmbed(err.message));
     }
   }

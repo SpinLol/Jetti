@@ -4,6 +4,7 @@ import { apiClient } from '../../api/client';
 import { getSdk } from '../../api/generated/graphql';
 import { colors } from '../../constants';
 import { ErrorEmbed, WarningEmbed } from '../../core/customEmbeds';
+import { logger } from '../../util/logger';
 
 interface PromptArgs {
   teamId: number;
@@ -56,7 +57,7 @@ export default class UpdateTeamNameCommand extends Command {
         }),
       );
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       return message.say(ErrorEmbed(err.message));
     }
   }

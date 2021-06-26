@@ -4,6 +4,7 @@ import { apiClient } from '../../api/client';
 import { getSdk, Map } from '../../api/generated/graphql';
 import { allMaps, colors } from '../../constants';
 import { ErrorEmbed, WarningEmbed } from '../../core/customEmbeds';
+import { logger } from '../../util/logger';
 
 interface PromptArgs {
   user: User;
@@ -55,7 +56,7 @@ export default class UpdatePlayerMapCommand extends Command {
         }),
       );
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       return message.say(ErrorEmbed(err.message));
     }
   }

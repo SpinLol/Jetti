@@ -4,6 +4,7 @@ import { apiClient } from '../../api/client';
 import { getSdk } from '../../api/generated/graphql';
 import { colors } from '../../constants';
 import { ErrorEmbed } from '../../core/customEmbeds';
+import { logger } from '../../util/logger';
 
 export default class ListMissingPlayersCommand extends Command {
   constructor(client: CommandoClient) {
@@ -45,7 +46,7 @@ export default class ListMissingPlayersCommand extends Command {
         }),
       );
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       return message.say(ErrorEmbed(err.message));
     }
   }

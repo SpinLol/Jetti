@@ -5,6 +5,7 @@ import { getSdk } from '../../api/generated/graphql';
 import { playerToString } from '../../core/print';
 import { colors } from '../../constants';
 import { ErrorEmbed } from '../../core/customEmbeds';
+import { logger } from '../../util/logger';
 
 interface PromptArgs {
   teamName: string;
@@ -131,7 +132,7 @@ export default class AddTeamCommand extends Command {
         }),
       );
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       return message.say(ErrorEmbed(err.message));
     }
   }

@@ -5,6 +5,7 @@ import { getSdk } from '../../api/generated/graphql';
 import { colors } from '../../constants';
 import { ErrorEmbed, WarningEmbed } from '../../core/customEmbeds';
 import { printLevelName } from '../../core/print';
+import { logger } from '../../util/logger';
 
 interface PromptArgs {
   user: User;
@@ -61,7 +62,7 @@ export default class RemovePlayerCommand extends Command {
         }),
       );
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       return message.say(ErrorEmbed(err.message));
     }
   }

@@ -4,6 +4,7 @@ import { apiClient } from '../../api/client';
 import { getSdk } from '../../api/generated/graphql';
 import { colors } from '../../constants';
 import { ErrorEmbed, WarningEmbed } from '../../core/customEmbeds';
+import { logger } from '../../util/logger';
 
 interface PromptArgs {
   matchId: number;
@@ -50,7 +51,7 @@ export default class DeleteMatchCommand extends Command {
         }),
       );
     } catch (err) {
-      console.error(err);
+      logger.error(err);
       return message.say(ErrorEmbed(err.message));
     }
   }
